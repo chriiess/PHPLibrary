@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>文件上传测试demo</title>
+</head>
+<style>
+p.result {
+    margin: 0px;
+    padding: 0px;
+}
+
+fieldset {
+    width: 45%;
+    margin: 15px 0px 25px 0px;
+    padding: 15px;
+}
+
+fieldset.left {
+    float: left;
+    clear: left;
+}
+
+fieldset.right {
+    float: right;
+    clear: right;
+}
+
+legend {
+    font-weight: bold;
+}
+
+.button {
+    text-align: right;
+}
+
+.button input {
+    font-weight: bold;
+}
+
+#dnd_drag {
+    display: none;
+    text-align: center;
+    padding: 1em 0;
+    margin: 1em 0;
+    color: #555;
+    border: 2px dashed #888;
+    border-radius: 7px;
+    cursor: default;
+}
+
+#dnd_drag.hover {
+    border: 2px dashed #000;
+}
+
+#xhr_status,
+#dnd_status {
+    font-size: 90%;
+    font-style: italic;
+}
+</style>
+
+<body>
+    <h1>上传文件demo</h1>
+    <fieldset class="left">
+        <legend>单文件</legend>
+        <form name="form1" enctype="multipart/form-data" method="post" action="upload.php" >
+        <p>
+            <input type="file" size="32" name="field" value="" />
+        </p>
+        <p class="button">
+            <input type="hidden" name="action" value="simple" />
+            <input type="submit" name="Submit" value="提交" />
+        </p>
+        </form>
+    </fieldset>
+    <fieldset class="left">
+        <legend>多文件</legend>
+        <form name="form2" enctype="multipart/form-data" method="post" action="upload.php" >
+        <p>
+            <input type="file" size="32" name="field[]" value="" />
+        </p>
+        <p>
+            <input type="file" size="32" name="field[]" value="" />
+        </p>
+        <p>
+            <input type="file" size="32" name="field[]" value="" />
+        </p>
+        <p class="button">
+            <input type="hidden" name="action" value="simple" />
+            <input type="submit" name="Submit" value="提交" />
+        </p>
+        </form>
+    </fieldset>
+</body>
+
+</html>
