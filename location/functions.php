@@ -85,7 +85,7 @@ function getIPLocQQ($queryIP) {
  *
  *          The example returns the following:
  *
- *          中国广东省广州市 电信
+ *          中国广东广州
  */
 function getIPLocSina($queryIP) {
     $url = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=' . $queryIP;
