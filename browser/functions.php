@@ -46,3 +46,5 @@ function getBrowser() {
 
     return $browser;
 }
+
+?>
