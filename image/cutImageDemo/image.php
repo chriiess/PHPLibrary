@@ -2,10 +2,9 @@
 
 error_reporting(7);
 
+include '../cutImage.class.php';
 
-include '../image.class.php';
-
-$imageClass = new imageClass();
+$imageClass = new cutImageClass();
 $image = '1.jpg';
 $imageClass->loadImage($image);
 $imageClass->thumb(1);
