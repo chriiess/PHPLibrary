@@ -223,7 +223,7 @@ function removeXss($string) {
 /**
  * 清除html、css、js格式并去除空格
  */
-function ClearHtml($descclear) {
+function clearHtml($descclear) {
 
     $descclear = preg_replace("/<[ ]+/si", "<", $descclear); //过滤<__("<"号后面带空格)
     $descclear = preg_replace("/<\!--.*?-->/si", "", $descclear); //过滤html注释

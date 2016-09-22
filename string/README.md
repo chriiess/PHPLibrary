@@ -8,6 +8,7 @@
 * utf8Strlen 	不使用mb_substr统计utf8中文字符串长度的函数
 * strCut 		符截取 支持UTF8/GBK
 * removeXss 	xss过滤
+* clearHtml 	清除html、css、js格式并去除空格
 
 
 ### class
