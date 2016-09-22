@@ -1,4 +1,4 @@
-该项目由 [程序员日志博客](http://www.gwing.cn) 提供
+该项目由 [程序员日志](http://gwing.cn) 提供
 
 ### php代码片段
 
