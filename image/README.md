@@ -1,4 +1,5 @@
 # 图片处理相关代码片段
 
 ### class
-1. cutImage.class.php 	图片裁剪处理类
+* Image.class.php 		图片处理类
+* Gif.class.php 		Gif图片处理类

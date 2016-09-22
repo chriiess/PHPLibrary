@@ -40,3 +40,74 @@ function listToTree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root = 
     }
     return $tree;
 }
+
+/**
+ * stdClass 对象转换成数组
+ * @param $d object 对象
+ * @return array 数组
+ */
+function objectToArray($d) {
+    if (is_object($d)) {
+        // Gets the properties of the given object
+        // with get_object_vars function
+        $d = get_object_vars($d);
+    }
+    if (is_array($d)) {
+        /*
+         * Return array converted to object
+         * Using __FUNCTION__ (Magic constant)
+         * for recursive call
+         */
+        return array_map(__FUNCTION__, $d);
+    } else {
+        // Return array
+        return $d;
+    }
+}
+
+/**
+ * 数组转换成 stdClass 对象
+ * @param $d array 数组
+ * @return object 对象
+ */
+function arrayToObject($d) {
+    if (is_array($d)) {
+        /*
+         * Return array converted to object
+         * Using __FUNCTION__ (Magic constant)
+         * for recursive call
+         */
+        return (object) array_map(__FUNCTION__, $d);
+    } else {
+        // Return object
+        return $d;
+    }
+}
+
+/**
+ * 重定义二维数组的键值
+ * @example
+ *   $items = [
+ *       ['id' => 10, 'name' => 'xxx'],
+ *       ['id' => 11, 'name' => 'xxxx'],
+ *   ]
+ *
+ *   $newItems = Arr::getDictionary($itmes, 'id');
+ *
+ *   $newItems value like this:
+ *   [
+ *      '10' => ['id' => 10, 'name' => 'xxx'],
+ *      '11' => ['id' => 11, 'name' => 'xxxx'],
+ *   ]
+ *
+ * @param array $items 二维数组
+ * @param int|string $key         $items子数组里面的键名
+ * @return array
+ */
+function getDictionary(Array $items, $key) {
+    $dictionary = [];
+    foreach ($items as $value) {
+        $dictionary[$value[$key]] = $value;
+    }
+    return $dictionary;
+}

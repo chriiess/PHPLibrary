@@ -23,32 +23,6 @@ function getUrlSuffix($filename = '') {
 }
 
 /**
- * 根据URL下载图片
- */
-function imagefromURL($image, $rename) {
-    $ch = curl_init($image);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
-    $rawdata = curl_exec($ch);
-    curl_close($ch);
-    $fp = fopen("$rename", 'w');
-    fwrite($fp, $rawdata);
-    fclose($fp);
-}
-
-/**
- * 检测URL是否有效
- */
-function isvalidURL($url) {
-    $check = 0;
-    if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
-        $check = 1;
-    }
-    return $check;
-}
-
-/**
  * 使用tinyurl生成短网址
  */
 function getTinyUrl($url) {
@@ -69,4 +43,12 @@ function dataUri($file, $mime) {
     $contents = file_get_contents($file);
     $base64 = base64_encode($contents);
     return "data:$mime;base64,$base64";
+}
+
+/**
+ * 使用 PHP 和 Google 获取域名的 favicon 图标
+ */
+function getFavicon($url) {
+    $url = str_replace("http://", '', $url);
+    return "http://www.google.com/s2/favicons?domain=" . $url;
 }
