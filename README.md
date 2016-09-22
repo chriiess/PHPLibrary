@@ -1,3 +1,5 @@
+该项目由 [程序员日志博客](http://www.gwing.cn) 提供
+
 ### php代码片段
 
 * array		数组相关
