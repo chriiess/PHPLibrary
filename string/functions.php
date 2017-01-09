@@ -259,3 +259,46 @@ function clearHtml($descclear) {
 
     return $descclear;
 }
+
+/**
+ * 修复html
+ */
+function repairHtml($html, $length = null) {
+
+    $result = '';
+    $tagStack = array();
+    $len = 0;
+    $contents = preg_split("~(<[^>]+?>)~si", $html, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    foreach ($contents as $tag) {
+        if (trim($tag) == "") {
+            continue;
+        }
+
+        if (preg_match("~<([a-z0-9]+)[^/>]*?/>~si", $tag)) {
+            $result .= $tag;
+        } else if (preg_match("~</([a-z0-9]+)[^/>]*?>~si", $tag, $match)) {
+            if ($tagStack[count($tagStack) - 1] == $match[1]) {
+                array_pop($tagStack);
+                $result .= $tag;
+            }
+        } else if (preg_match("~<([a-z0-9]+)(?: .*)?(?<![/|/ ])>~si", $tag, $match)) {
+            array_push($tagStack, $match[1]);
+            $result .= $tag;
+        } else if (preg_match("~<!--.*?-->~si", $tag)) {
+            $result .= $tag;
+        } else {
+            if (is_null($length) || $len + mb_strlen($tag) < $length) {
+                $result .= $tag;
+                $len += mb_strlen($tag);
+            } else {
+                $str = mb_substr($tag, 0, $length - $len + 1);
+                $result .= $str;
+                break;
+            }
+        }
+    }
+    while (!empty($tagStack)) {
+        $result .= '</' . array_pop($tagStack) . '>';
+    }
+    return $result;
+}

@@ -9,9 +9,12 @@
 * strCut 		符截取 支持UTF8/GBK
 * removeXss 	xss过滤
 * clearHtml 	清除html、css、js格式并去除空格
+* repairHtml	修复html
 
 
 ### class
-* PinYin.class.php 	汉字转拼音类
-* Chinese.class.php 汉字处理类
+* PinYin.class.php 		汉字转拼音类
+* Chinese.class.php 	汉字处理类
+* Classfier.class.php  	朴素贝叶斯算法
+* encrypt.class.php 	加密解密算法
 

@@ -12,7 +12,8 @@ print_r(combineDika($color, $size, $local));
  *
  * @param unknown_type $data
  */
-function combineDika() {
+function combineDika()
+{
     $data = func_get_args();
     $cnt = count($data);
     $result = array();
@@ -31,7 +32,8 @@ function combineDika() {
  * @param unknown_type $arr1
  * @param unknown_type $arr2
  */
-function combineArray($arr1, $arr2) {
+function combineArray($arr1, $arr2)
+{
     $result = array();
     foreach ($arr1 as $item1) {
         foreach ($arr2 as $item2) {
