@@ -1,17 +1,14 @@
 <?php
 
 /**
- * #######################################
- *
  * 浏览器相关代码片段
- *
- * #######################################
  */
 
 /**
  * 获取浏览器类型
  */
-function getBrowser() {
+function getBrowser()
+{
 
     $browser = 'other';
 
@@ -22,11 +19,11 @@ function getBrowser() {
     } elseif (strpos($_SERVER["HTTP_USER_AGENT"], "TencentTraveler")) {
         //  or (strpos($_SERVER["HTTP_USER_AGENT"], "Trident") AND strpos($_SERVER["HTTP_USER_AGENT"], "SLCC2"))
         $browser = 'telcent';
-    } elseif (strpos($_SERVER["HTTP_USER_AGENT"], "SE 2") AND strpos($_SERVER["HTTP_USER_AGENT"], "MetaSr")) {
+    } elseif (strpos($_SERVER["HTTP_USER_AGENT"], "SE 2") and strpos($_SERVER["HTTP_USER_AGENT"], "MetaSr")) {
         $browser = 'sogou';
-    } elseif (strpos($_SERVER["HTTP_USER_AGENT"], "360SE") AND !strpos($_SERVER["HTTP_USER_AGENT"], "TencentTraveler")) {
+    } elseif (strpos($_SERVER["HTTP_USER_AGENT"], "360SE") and !strpos($_SERVER["HTTP_USER_AGENT"], "TencentTraveler")) {
         $browser = '360';
-    } elseif (strpos($_SERVER["HTTP_USER_AGENT"], "QIHU 360EE") AND !strpos($_SERVER["HTTP_USER_AGENT"], "TencentTraveler")) {
+    } elseif (strpos($_SERVER["HTTP_USER_AGENT"], "QIHU 360EE") and !strpos($_SERVER["HTTP_USER_AGENT"], "TencentTraveler")) {
         $browser = '360';
     } elseif (strpos($_SERVER["HTTP_USER_AGENT"], "MSIE 9.0")) {
         $browser = 'ie9';
@@ -50,7 +47,8 @@ function getBrowser() {
 /*
  * 获取目标设备类型
  */
-function getEquipment() {
+function getEquipment()
+{
     $useragent = strtolower($_SERVER["HTTP_USER_AGENT"]);
     // iphone
     $is_iphone = strripos($useragent, 'iphone');
@@ -84,5 +82,3 @@ function getEquipment() {
     }
     return 'other';
 }
-
-?>

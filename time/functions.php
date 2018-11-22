@@ -8,7 +8,8 @@
  *        echo nongli('20160921'); //标准8位
  *        丙申(猴)年 八月廿一
  */
-function nongli($riqi) {
+function nongli($riqi)
+{
     //优化修改 20160807 FXL
     $nian = date('Y', strtotime($riqi));
     $yue = date('m', strtotime($riqi));
@@ -176,29 +177,29 @@ function nongli($riqi) {
 
     }
     switch ($yue) {
-    //再加当年的几个月
-    case 12:
-        $total += 30;
-    case 11:
-        $total += 31;
-    case 10:
-        $total += 30;
-    case 9:
-        $total += 31;
-    case 8:
-        $total += 31;
-    case 7:
-        $total += 30;
-    case 6:
-        $total += 31;
-    case 5:
-        $total += 30;
-    case 4:
-        $total += 31;
-    case 3:
-        $total += 28;
-    case 2:
-        $total += 31;
+        //再加当年的几个月
+        case 12:
+            $total += 30;
+        case 11:
+            $total += 31;
+        case 10:
+            $total += 30;
+        case 9:
+            $total += 31;
+        case 8:
+            $total += 31;
+        case 7:
+            $total += 30;
+        case 6:
+            $total += 31;
+        case 5:
+            $total += 30;
+        case 4:
+            $total += 31;
+        case 3:
+            $total += 28;
+        case 2:
+            $total += 31;
     }
     if ($nian % 4 == 0 && $yue > 2) {
         $total++;
@@ -255,7 +256,8 @@ function nongli($riqi) {
  *          $date = "1351836000";
  *          echo tranTime($date);
  */
-function transferTime($time) {
+function transferTime($time)
+{
     $rtime = date("m-d H:i", $time);
     $htime = date("H:i", $time);
 
@@ -283,4 +285,84 @@ function transferTime($time) {
     return $str;
 }
 
-?>
+/**
+ * PHP计算两个时间段是否有交集（边界重叠不算）
+ *
+ * @param string $s1
+ * @param string $e1
+ * @param string $s2
+ * @param string $e2
+ * @return bool
+ */
+function isTimeCross($s1 = '', $e1 = '', $s2 = '', $e2 = '')
+{
+    if ($e1 <= $s2 || $e2 <= $s1) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+/**
+ * 文字时间描述正则处理成时间戳
+ * @example
+ *     今天 17:27 ^今天.*
+ *     昨天 19:35 ^昨天.*
+ *     25日 21:30 ^[\d]*日
+ *     02月28日 ^[\d]*月[\d]*日
+ *     13年06月25日 ^[\d]*年[\d]*月[\d]*日
+ * @return 时间戳
+ */
+function timeDesc2str($time)
+{
+    //昨天，今天和明天的日期转换
+    //($startstr 今天开始时间戳)
+    //返回(昨天，今天和明天)的0点和23点59分59秒
+    function alldaytostr($startstr)
+    {
+        $oneday_count = 3600 * 24; //一天有多少秒
+        //明天
+        $tomorrow_s = $startstr + $oneday_count; //明天开始
+        $tomorrow_e = $tomorrow_s + $oneday_count - 1; //明天结束
+        //昨天
+        $yesterday_s = $startstr - $oneday_count; //昨天开始
+        $yesterday_e = $startstr - 1; //昨天结束
+        //今天结束
+        $today_e = $tomorrow_s - 1;
+
+        //昨天、今天和明天 0点和当天23点59分59秒合并成数组
+        $allday_array = array('yesterday' => array($yesterday_s, $yesterday_e),
+            'today' => array($startstr, $today_e),
+            'tomorrow' => array($tomorrow_s, $tomorrow_e));
+        return $allday_array;
+    }
+
+    date_default_timezone_set("Asia/Shanghai");
+    //当天开始时间
+    $btime = date('Y-m-d' . ' 00:00:00');
+    //转换成“开始”的时间戳
+    $btimestr = strtotime($btime);
+    $daylist = alldaytostr($btimestr);
+    //今天
+    if (preg_match('/^今天.*/', $time)) {
+        preg_match('/[\d]*:[\d]*/', $time, $day);
+        $created_at = strtotime(date('Y-m-d' . ' ' . $day[0] . ':00'));
+    } else if (preg_match('/^昨天.*/', $time)) {
+        //昨天
+        preg_match('/[\d]*:[\d]*/', $time, $day);
+        $created_at = strtotime(date('Y-m-d' . ' ' . $day[0] . ':00', $daylist['yesterday'][0]));
+    } else if (preg_match('/^[\d]*日/', $time)) {
+        //本月
+        preg_match('/^([\d]*)日\s([\d:]*)/', $time, $day);
+        $created_at = strtotime(date('Y-m-' . $day[1] . ' ' . $day[2] . ':00'));
+    } else if (preg_match('/^[\d]*月[\d]*日/', $time)) {
+        //本年
+        preg_match('/^([\d]*)月([\d]*)日/', $time, $day);
+        $created_at = strtotime(date('Y-' . $day[1] . '-' . $day[2] . ' 00:00:00'));
+    } else if (preg_match('/^[\d]*年[\d]*月[\d]*日/', $time)) {
+        //历年
+        preg_match('/^([\d]*)年([\d]*)月([\d]*)日/', $time, $day);
+        $created_at = strtotime(date($day[1] . '-' . $day[2] . '-' . $day[3] . ' 00:00:00'));
+    }
+    return $created_at;
+}

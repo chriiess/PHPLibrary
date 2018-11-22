@@ -8,7 +8,8 @@ $loop = true; //echo '当前查找的目录为：'.$basedir.'当前的设置是�
 echo '（1）', $loop ? '检查当前目录以及当前目录的子目录' : '只针对当前目录进行检测';
 echo '（2）', $auto ? '检测文件BOM同时去除检测到BOM文件的BOM' : '只检测文件BOM不执行去除BOM操作';
 checkdir($basedir, $loop);
-function checkdir($basedir = '', $loop = true) {
+function checkdir($basedir = '', $loop = true)
+{
     $basedir = empty($basedir) ? '.' : $basedir;
     if ($dh = opendir($basedir)) {
         while (($file = readdir($dh)) !== false) {
@@ -28,7 +29,8 @@ function checkdir($basedir = '', $loop = true) {
         closedir($dh);
     }
 }
-function checkBOM($filename) {
+function checkBOM($filename)
+{
     global $auto;
     $contents = file_get_contents($filename);
     $charset[1] = substr($contents, 0, 1);
@@ -46,7 +48,8 @@ function checkBOM($filename) {
         return (' 没有找到BOM');
     }
 }
-function rewrite($filename, $data) {
+function rewrite($filename, $data)
+{
     $filenum = fopen($filename, 'w');
     flock($filenum, LOCK_EX);
     fwrite($filenum, $data);

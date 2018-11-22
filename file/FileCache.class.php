@@ -20,7 +20,8 @@
  *
  */
 
-class FileCache {
+class FileCache
+{
     /**
      * 缓存文件存放路径
      */
@@ -44,7 +45,8 @@ class FileCache {
 
     private $basepath;
 
-    public function __construct($path = "cache", $max_path = 100, $max_file = 50000, $gc_probality = 100) {
+    public function __construct($path = "cache", $max_path = 100, $max_file = 50000, $gc_probality = 100)
+    {
         $this->path = $path;
         $this->max_path = $max_path;
         $this->max_file = $max_file;
@@ -60,7 +62,8 @@ class FileCache {
      * @param int $expired     过期时间，不设默认为一年
      * @return bool
      */
-    public function set($key, $val, $expired = 31536000) {
+    public function set($key, $val, $expired = 31536000)
+    {
         if (rand(0, 1000000) < $this->gc_probality) {
             $this->gc();
         }
@@ -84,7 +87,8 @@ class FileCache {
      * @param string $key     key,操作数据的唯一标识
      * @return null/data
      */
-    public function get($key) {
+    public function get($key)
+    {
         $key = strval($key);
         $cache_file = $this->_getCacheFile($key);
         $val = @file_get_contents($cache_file);
@@ -111,7 +115,8 @@ class FileCache {
      * @param int $expired     过期时间，不设默认为一年
      * @return bool
      */
-    public function startCache($key, $expired = 31536000) {
+    public function startCache($key, $expired = 31536000)
+    {
         $data = $this->get($key);
         if (!empty($data)) {
             print $data;
@@ -128,7 +133,8 @@ class FileCache {
      *
      * @return bool
      */
-    public function endCache() {
+    public function endCache()
+    {
         $data = ob_get_contents();
         ob_end_clean();
         preg_match("/(.*?)filecache_used::]/is", $data, $key);
@@ -149,7 +155,8 @@ class FileCache {
      * @param string $key     保存的key,操作数据的唯一标识，不可重复
      * @return bool
      */
-    public function delete($key) {
+    public function delete($key)
+    {
         $key = strval($key);
         $cache_file = $this->_getCacheFile($key);
 
@@ -170,7 +177,8 @@ class FileCache {
      * @param string $path 缓存目录
      * @return void
      */
-    public function gc($path = null) {
+    public function gc($path = null)
+    {
         if ($path === null) {
             $path = $this->basepath;
         }
@@ -194,7 +202,8 @@ class FileCache {
         closedir($handle);
     }
 
-    private function _getCacheFile($key) {
+    private function _getCacheFile($key)
+    {
         $hash = $this->hash32($key);
         $path = $this->basepath . $this->_getPathName($hash);
         $file = $path . DIRECTORY_SEPARATOR . $this->_getCacheFileName($hash);
@@ -208,15 +217,18 @@ class FileCache {
         return $file;
     }
 
-    private function _getPathName($hash) {
+    private function _getPathName($hash)
+    {
         return $hash % $this->max_path;
     }
 
-    private function _getCacheFileName($hash) {
+    private function _getCacheFileName($hash)
+    {
         return $hash % $this->max_file;
     }
 
-    private function hash32($str) {
+    private function hash32($str)
+    {
         return crc32($str) >> 16 & 0x7FFFFFFF;
     }
 }

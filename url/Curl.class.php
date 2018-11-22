@@ -10,7 +10,8 @@ $ch->open()->get_cookie($this->_cookie)->get("login", $postdata);
 $result = $ch->header() . $ch->body();
 $ch->close();
  */
-class Curl {
+class Curl
+{
     private $_is_temp_cookie = false;
     private $_header;
     private $_body;
@@ -28,7 +29,8 @@ class Curl {
     protected $_url = array();
     protected $_referer = array();
 
-    public function __construct($options = array()) {
+    public function __construct($options = array())
+    {
         $defaults = array();
 
         $defaults['timeout'] = 30;
@@ -38,7 +40,8 @@ class Curl {
         $this->_options = array_merge($defaults, $options);
     }
 
-    public function open() {
+    public function open()
+    {
         $this->_ch = curl_init();
 
         //curl_setopt ( $this->_ch, CURLOPT_FOLLOWLOCATION, true );
@@ -54,7 +57,8 @@ class Curl {
         return $this;
     }
 
-    public function close() {
+    public function close()
+    {
         if (is_resource($this->_ch)) {
             curl_close($this->_ch);
         }
@@ -64,7 +68,8 @@ class Curl {
         }
     }
 
-    public function cookie() {
+    public function cookie()
+    {
         if (!isset($this->_cookie)) {
             if (!empty($this->_cookie) && $this->_is_temp_cookie && is_file($this->_cookie)) {
                 unlink($this->_cookie);
@@ -80,7 +85,8 @@ class Curl {
         return $this;
     }
 
-    public function get_cookie($cookfile) {
+    public function getCookie($cookfile)
+    {
 
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->_ch, CURLOPT_COOKIEJAR, $cookfile);
@@ -88,7 +94,8 @@ class Curl {
         return $this;
     }
 
-    public function set_cookie($cookfile) {
+    public function setCookie($cookfile)
+    {
 
         curl_setopt($this->_ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->_ch, CURLOPT_COOKIEFILE, $cookfile);
@@ -96,20 +103,23 @@ class Curl {
         return $this;
     }
 
-    public function set_session($session) {
+    public function setSession($session)
+    {
 
         curl_setopt($this->_ch, CURLOPT_COOKIESESSION, $session);
 
         return $this;
     }
 
-    public function ssl() {
+    public function ssl()
+    {
         curl_setopt($this->_ch, CURLOPT_SSL_VERIFYPEER, false);
 
         return $this;
     }
 
-    public function proxy($host = null, $port = null, $type = null, $user = null, $pass = null, $auth = null) {
+    public function proxy($host = null, $port = null, $type = null, $user = null, $pass = null, $auth = null)
+    {
         $this->_proxy = isset($host) ? $host : $this->_proxy;
         $this->_proxy_port = isset($port) ? $port : $this->_proxy_port;
         $this->_proxy_type = isset($type) ? $type : $this->_proxy_type;
@@ -132,7 +142,8 @@ class Curl {
         return $this;
     }
 
-    public function post($action, $query = array()) {
+    public function post($action, $query = array())
+    {
         if (is_array($query)) {
             foreach ($query as $key => $val) {
                 if (!empty($val) && $val{0} != '@') {
@@ -158,7 +169,8 @@ class Curl {
         return $this;
     }
 
-    public function get($action, $query = array()) {
+    public function get($action, $query = array())
+    {
         $url = $this->_url[$action];
 
         if (!empty($query)) {
@@ -174,17 +186,20 @@ class Curl {
         return $this;
     }
 
-    public function getinfo() {
+    public function getinfo()
+    {
         return curl_getinfo($this->_ch);
     }
-    public function output_trace($output) {
+    public function outputTrace($output)
+    {
         curl_setopt($this->_ch, CURLOPT_VERBOSE, 1);
         curl_setopt($this->_ch, CURLOPT_STDERR, $output);
 
         return $this;
     }
 
-    public function download($action, $query = array(), $saveto, $rewritemode = 0) {
+    public function download($action, $query = array(), $saveto, $rewritemode = 0)
+    {
         $url = $this->_url[$action];
         if (!empty($query)) {
             $url .= strpos($url, '?') === false ? '?' : '&';
@@ -210,76 +225,89 @@ class Curl {
         }
     }
 
-    public function put($action, $query = array()) {
+    public function put($action, $query = array())
+    {
         curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, 'PUT');
 
         return $this->post($action, $query);
     }
 
-    public function delete($action, $query = array()) {
+    public function delete($action, $query = array())
+    {
         curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
 
         return $this->post($action, $query);
     }
 
-    public function head($action, $query = array()) {
+    public function head($action, $query = array())
+    {
         curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, 'HEAD');
 
         return $this->post($action, $query);
     }
 
-    public function options($action, $query = array()) {
+    public function options($action, $query = array())
+    {
         curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, 'OPTIONS');
 
         return $this->post($action, $query);
     }
 
-    public function trace($action, $query = array()) {
+    public function trace($action, $query = array())
+    {
         curl_setopt($this->_ch, CURLOPT_CUSTOMREQUEST, 'TRACE');
 
         return $this->post($action, $query);
     }
 
-    public function connect() {
+    public function connect()
+    {
 
     }
 
-    public function follow_location() {
+    public function followLocation()
+    {
         preg_match('#Location:\s*(.+)#i', $this->header(), $match);
 
         if (isset($match[1])) {
-            $this->set_action('auto_location_gateway', $match[1], $this->effective_url());
+            $this->setAction('auto_location_gateway', $match[1], $this->effectiveUrl());
 
-            $this->get('auto_location_gateway')->follow_location();
+            $this->get('auto_location_gateway')->followLocation();
         }
 
         return $this;
     }
 
-    public function set_action($action, $url, $referer = '') {
+    public function setAction($action, $url, $referer = '')
+    {
         $this->_url[$action] = $url;
         $this->_referer[$action] = $referer;
 
         return $this;
     }
 
-    public function header() {
+    public function header()
+    {
         return $this->_header;
     }
 
-    public function body() {
+    public function body()
+    {
         return $this->_body;
     }
 
-    public function effective_url() {
+    public function effectiveUrl()
+    {
         return curl_getinfo($this->_ch, CURLINFO_EFFECTIVE_URL);
     }
 
-    public function http_code() {
+    public function httpCode()
+    {
         return curl_getinfo($this->_ch, CURLINFO_HTTP_CODE);
     }
 
-    private function _requrest() {
+    private function _requrest()
+    {
         $response = curl_exec($this->_ch);
 
         $errno = curl_errno($this->_ch);
@@ -294,7 +322,8 @@ class Curl {
         $this->_body = substr($response, $header_size);
     }
 
-    public function __destruct() {
+    public function __destruct()
+    {
         $this->close();
     }
 }

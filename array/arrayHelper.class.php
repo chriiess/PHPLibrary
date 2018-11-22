@@ -1,6 +1,7 @@
 <?php
 
-class ArrayHelper {
+class ArrayHelper
+{
 
     /**
      * 从数组中删除空白的元素（包括只有空白字符的元素）
@@ -17,7 +18,8 @@ class ArrayHelper {
      * @param array $arr 要处理的数组
      * @param boolean $trim 是否对数组元素调用 trim 函数
      */
-    static function removeEmpty(&$arr, $trim = TRUE) {
+    public static function removeEmpty(&$arr, $trim = true)
+    {
         foreach ($arr as $key => $value) {
             if (is_array($value)) {
                 self::removeEmpty($arr[$key]);
@@ -56,7 +58,8 @@ class ArrayHelper {
      *
      * @return array 包含指定键所有值的数组
      */
-    static function getCols($arr, $col) {
+    public static function getCols($arr, $col)
+    {
         $ret = array();
         foreach ($arr as $row) {
             if (isset($row[$col])) {
@@ -109,7 +112,8 @@ class ArrayHelper {
      *
      * @return array 转换后的 HashMap 样式数组
      */
-    static function toHashmap($arr, $keyField, $valueField = NULL) {
+    public static function toHashmap($arr, $keyField, $valueField = null)
+    {
         $ret = array();
         if ($valueField) {
             foreach ($arr as $row) {
@@ -134,7 +138,8 @@ class ArrayHelper {
      *
      * @return array 分组后的结果
      */
-    static function groupBy($arr, $keyField) {
+    public static function groupBy($arr, $keyField)
+    {
         $ret = array();
         foreach ($arr as $row) {
             $key = $row[$keyField];
@@ -165,7 +170,8 @@ class ArrayHelper {
      *
      * return array 树形结构的数组
      */
-    static function toTree($arr, $keyNodeId, $keyParentId = 'parent_id', $keyChildrens = 'childrens', &$refs = NULL) {
+    public static function toTree($arr, $keyNodeId, $keyParentId = 'parent_id', $keyChildrens = 'childrens', &$refs = null)
+    {
         $refs = array();
         foreach ($arr as $offset => $row) {
             $arr[$offset][$keyChildrens] = array();
@@ -199,7 +205,8 @@ class ArrayHelper {
      *
      * @return array 展开后的数组
      */
-    static function treeToArray($tree, $keyChildrens = 'childrens') {
+    public static function treeToArray($tree, $keyChildrens = 'childrens')
+    {
         $ret = array();
         if (isset($tree[$keyChildrens]) && is_array($tree[$keyChildrens])) {
             foreach ($tree[$keyChildrens] as $child) {
@@ -224,7 +231,8 @@ class ArrayHelper {
      *
      * @return array 排序后的数组
      */
-    static function sortByCol($array, $keyname, $dir = SORT_ASC) {
+    public static function sortByCol($array, $keyname, $dir = SORT_ASC)
+    {
         return self::sortByMultiCols($array, array($keyname => $dir));
     }
 
@@ -244,7 +252,8 @@ class ArrayHelper {
      *
      * @return array 排序后的数组
      */
-    static function sortByMultiCols($rowset, $args) {
+    public static function sortByMultiCols($rowset, $args)
+    {
         $sortArray = array();
         $sortRule = '';
         foreach ($args as $sortField => $sortDir) {

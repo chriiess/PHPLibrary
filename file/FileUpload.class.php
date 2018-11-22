@@ -6,7 +6,8 @@
  * @author albafica.wang
  * @createdate 2014/11/03
  */
-class FileUpload {
+class FileUpload
+{
 
     /**
      * 默认配置定义
@@ -164,7 +165,8 @@ class FileUpload {
      * @param string $name      配置项名称
      * @return string           配置项值
      */
-    public function __get($name) {
+    public function __get($name)
+    {
         if (isset($this->_config[$name])) {
             return $this->_config[$name];
         }
@@ -176,7 +178,8 @@ class FileUpload {
      * @param type $name
      * @param type $value
      */
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         if (isset($this->_config[$name])) {
             $this->_config[$name] = $value;
         }
@@ -187,7 +190,8 @@ class FileUpload {
      * @param type $name
      * @return type
      */
-    public function __isset($name) {
+    public function __isset($name)
+    {
         return isset($this->_config[$name]);
     }
 
@@ -196,7 +200,8 @@ class FileUpload {
      * @access public
      * @param array $config  上传参数
      */
-    public function __construct($config = array()) {
+    public function __construct($config = array())
+    {
         if (is_array($config)) {
             $this->_config = array_merge($this->_config, $config);
         }
@@ -209,7 +214,8 @@ class FileUpload {
      * @param string $savePath  上传文件保存路径
      * @return boolean          上传结果
      */
-    public function upload($attachName, $savePath = '') {
+    public function upload($attachName, $savePath = '')
+    {
         //如果不指定保存文件名，则由系统默认
         if (empty($savePath)) {
             $savePath = $this->savePath;
@@ -277,7 +283,8 @@ class FileUpload {
      * @param string $savePath      文件保存路径
      * @return boolean              文件上传结果
      */
-    public function uploadMulti($savePath = '') {
+    public function uploadMulti($savePath = '')
+    {
         //如果不指定保存文件名，则由系统默认
         if (empty($savePath)) {
             $savePath = $this->savePath;
@@ -352,7 +359,8 @@ class FileUpload {
      * @param array $files  上传的文件变量
      * @return array
      */
-    private function dealFiles($files) {
+    private function dealFiles($files)
+    {
         $fileArray = array();
         $n = 0;
         foreach ($files as $key => $file) {
@@ -379,7 +387,8 @@ class FileUpload {
      * @param mixed $file 上传的文件数据
      * @return boolean  处理结果
      */
-    private function save($file) {
+    private function save($file)
+    {
         $filename = $file['savepath'] . $file['savename'];
         if (!$this->uploadReplace && is_file($filename)) {
             // 不覆盖同名文件
@@ -406,7 +415,8 @@ class FileUpload {
      * @access public
      * @return string       错误信息
      */
-    public function getErrMsg() {
+    public function getErrMsg()
+    {
         return $this->_error;
     }
 
@@ -415,7 +425,8 @@ class FileUpload {
      * @access public
      * @return array
      */
-    public function getUploadFileInfo() {
+    public function getUploadFileInfo()
+    {
         return $this->_uploadFileInfo;
     }
 
@@ -425,7 +436,8 @@ class FileUpload {
      * @param string $fileName      文件名
      * @return string       文件后缀
      */
-    private function getExt($fileName) {
+    private function getExt($fileName)
+    {
         $pathInfo = pathinfo($fileName);
         return $pathInfo['extension'];
     }
@@ -436,7 +448,8 @@ class FileUpload {
      * @param string $ext   文件后缀
      * @return boolean      文件后缀是否通过检查
      */
-    private function chkExt($ext) {
+    private function chkExt($ext)
+    {
         if (!empty($this->allowTypes)) {
             return in_array(strtolower($ext), $this->allowTypes, true);
         }
@@ -450,7 +463,8 @@ class FileUpload {
      * @param sting $type   文件类型
      * @return boolean      文件是否通过类型检查
      */
-    private function chkType($ext, $type) {
+    private function chkType($ext, $type)
+    {
         if (!isset($this->_mimes[$ext])) {
             return false;
         }
@@ -467,7 +481,8 @@ class FileUpload {
      * @param int $size 当前文件大小
      * @return boolean      文件是否通过大小检查
      */
-    private function chkSize($size) {
+    private function chkSize($size)
+    {
         return !($size > $this->maxSize) || (-1 == $this->maxSize);
     }
 
@@ -477,7 +492,8 @@ class FileUpload {
      * @param string $fileName
      * @return boolean 是否合法上传
      */
-    private function chkUpload($fileName) {
+    private function chkUpload($fileName)
+    {
         return is_uploaded_file($fileName);
     }
 
@@ -487,7 +503,8 @@ class FileUpload {
      * @param string $file  文件数据
      * @return string           新文件名
      */
-    private function getSaveName($file) {
+    private function getSaveName($file)
+    {
         $rule = $this->saveRule;
         if (empty($rule)) {
             //没有定义命名规则，则保持文件名不变
@@ -515,22 +532,23 @@ class FileUpload {
      * @param array $file  文件数据
      * @return string       子目录名称
      */
-    private function getSubName($file) {
+    private function getSubName($file)
+    {
         switch ($this->subType) {
-        case 'custom':
-            $dir = empty($this->subDir) ? date($this->dateFormat, time()) : $this->subDir;
-            break;
-        case 'date':
-            $dir = date($this->dateFormat, time()) . '/';
-            break;
-        case 'hash':
-        default:
-            $name = md5($file['savename']);
-            $dir = '';
-            for ($i = 0; $i < $this->hashLevel; $i++) {
-                $dir .= $name{$i} . '/';
-            }
-            break;
+            case 'custom':
+                $dir = empty($this->subDir) ? date($this->dateFormat, time()) : $this->subDir;
+                break;
+            case 'date':
+                $dir = date($this->dateFormat, time()) . '/';
+                break;
+            case 'hash':
+            default:
+                $name = md5($file['savename']);
+                $dir = '';
+                for ($i = 0; $i < $this->hashLevel; $i++) {
+                    $dir .= $name{$i} . '/';
+                }
+                break;
         }
         if (!is_dir($file['savepath'] . $dir)) {
             mkdir($file['savepath'] . $dir, 0777, true);
@@ -544,7 +562,8 @@ class FileUpload {
      * @param array $file 文件信息
      * @return boolean   文件是否通过检查
      */
-    private function check($file) {
+    private function check($file)
+    {
         if ($file['error'] !== 0) {
             //文件上传失败
             //捕获错误代码
@@ -581,28 +600,29 @@ class FileUpload {
      * @param string $errorNo  错误号码
      * @return void
      */
-    protected function error($errorNo) {
+    protected function error($errorNo)
+    {
         switch ($errorNo) {
-        case 1:
-            $this->_error = '上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值';
-            break;
-        case 2:
-            $this->_error = '上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值';
-            break;
-        case 3:
-            $this->_error = '文件只有部分被上传';
-            break;
-        case 4:
-            $this->_error = '没有文件被上传';
-            break;
-        case 6:
-            $this->_error = '找不到临时文件夹';
-            break;
-        case 7:
-            $this->_error = '文件写入失败';
-            break;
-        default:
-            $this->_error = '未知上传错误！';
+            case 1:
+                $this->_error = '上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值';
+                break;
+            case 2:
+                $this->_error = '上传文件的大小超过了 HTML 表单中 MAX_FILE_SIZE 选项指定的值';
+                break;
+            case 3:
+                $this->_error = '文件只有部分被上传';
+                break;
+            case 4:
+                $this->_error = '没有文件被上传';
+                break;
+            case 6:
+                $this->_error = '找不到临时文件夹';
+                break;
+            case 7:
+                $this->_error = '文件写入失败';
+                break;
+            default:
+                $this->_error = '未知上传错误！';
         }
         return;
     }

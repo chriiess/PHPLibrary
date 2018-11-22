@@ -4,7 +4,8 @@
  * 冒泡排序
  * 思路分析：在要排序的一组数中，对当前还未排好的序列，从前往后对相邻的两个数依次进行比较和调整，让较大的数往下沉，较小的往上冒。即，每当两相邻的数比较后发现它们的排序与排序要求相反时，就将它们互换。
  */
-function bubbleSort($arr) {
+function bubbleSort($arr)
+{
     $len = count($arr);
     //该层循环控制 需要冒泡的轮数
     for ($i = 1; $i < $len; $i++) {
@@ -24,7 +25,8 @@ function bubbleSort($arr) {
  * 选择排序
  * 思路分析：在要排序的一组数中，选出最小的一个数与第一个位置的数交换。然后在剩下的数当中再找最小的与第二个位置的数交换，如此循环到倒数第二个数和最后一个数比较为止。
  */
-function selectSort($arr) {
+function selectSort($arr)
+{
     //双重循环完成，外层控制轮数，内层控制比较次数
     $len = count($arr);
     for ($i = 0; $i < $len - 1; $i++) {
@@ -53,7 +55,8 @@ function selectSort($arr) {
  * 插入排序
  * 思路分析：在要排序的一组数中，假设前面的数已经是排好顺序的，现在要把第n个数插到前面的有序数中，使得这n个数也是排好顺序的。如此反复循环，直到全部排好顺序
  */
-function insertSort($arr) {
+function insertSort($arr)
+{
 
     $len = count($arr);
     for ($i = 1; $i < $len; $i++) {
@@ -77,7 +80,8 @@ function insertSort($arr) {
  * 快速排序
  * 思路分析：选择一个基准元素，通常选择第一个元素或者最后一个元素。通过一趟扫描，将待排序列分成两部分，一部分比基准元素小，一部分大于等于基准元素。此时基准元素在其排好序后的正确位置，然后再用同样的方法递归地排序划分的两部分。
  */
-function quickSort($arr) {
+function quickSort($arr)
+{
     //先判断是否需要继续进行
     $length = count($arr);
     if ($length <= 1) {

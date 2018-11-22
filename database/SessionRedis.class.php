@@ -14,7 +14,8 @@ session_start();
 $_SESSION['name'] = 'onmpw';
 
  */
-class SessionRedis implements SessionHandlerInterface {
+class SessionRedis implements SessionHandlerInterface
+{
 
     private $save_handle = '';
     private $reconnect = false; //是否重新连接  默认不重新连接
@@ -32,7 +33,8 @@ class SessionRedis implements SessionHandlerInterface {
         'RECONNECT' => false, //连接超时是否重连  默认不重连
     );
 
-    public function __construct($config = array()) {
+    public function __construct($config = array())
+    {
 
         if (!empty($config)) {
             $this->config = array_merge($this->config, $config);
@@ -40,7 +42,8 @@ class SessionRedis implements SessionHandlerInterface {
 
         $this->parseConfig();
     }
-    public function parseConfig() {
+    public function parseConfig()
+    {
 
         $this->save_handle = $this->config['SAVE_HANDLE'];
 
@@ -61,7 +64,8 @@ class SessionRedis implements SessionHandlerInterface {
      *
      * @return boolean
      */
-    public function redisConnect($host = '127.0.0.1', $port = 6379, $timeout = 0, $reserved = null, $retry_interval = 100) {
+    public function redisConnect($host = '127.0.0.1', $port = 6379, $timeout = 0, $reserved = null, $retry_interval = 100)
+    {
         //实例化Redis对象
         try {
 
@@ -100,7 +104,8 @@ class SessionRedis implements SessionHandlerInterface {
     /**
      * 解析连接
      */
-    private function parseConnect() {
+    private function parseConnect()
+    {
 
         if ($this->save_handle == 'Redis') {
 
@@ -115,7 +120,8 @@ class SessionRedis implements SessionHandlerInterface {
      *
      * @see SessionHandlerInterface::open()
      */
-    public function open($save_path, $name) {
+    public function open($save_path, $name)
+    {
         /*
          * 首先连接服务器
          */
@@ -130,7 +136,8 @@ class SessionRedis implements SessionHandlerInterface {
      *
      * @see SessionHandlerInterface::close()
      */
-    public function close() {
+    public function close()
+    {
         return true;
     }
 
@@ -141,7 +148,8 @@ class SessionRedis implements SessionHandlerInterface {
      *
      * @see SessionHandlerInterface::read()
      */
-    public function read($session_id) {
+    public function read($session_id)
+    {
         /*
          * 根据sessionId 构造键名
          */
@@ -160,7 +168,8 @@ class SessionRedis implements SessionHandlerInterface {
      *
      * @see SessionHandlerInterface::write()
      */
-    public function write($session_id, $session_data) {
+    public function write($session_id, $session_data)
+    {
         /*
          * 根据sessionId 构造键名
          */
@@ -187,7 +196,8 @@ class SessionRedis implements SessionHandlerInterface {
      *
      * @see SessionHandlerInterface::destroy()
      */
-    public function destroy($session_id) {
+    public function destroy($session_id)
+    {
         /*
          * 根据sessionId 构造键名
          */
@@ -202,7 +212,8 @@ class SessionRedis implements SessionHandlerInterface {
      *
      * @see SessionHandlerInterface::gc()
      */
-    public function gc($maxlifetime) {
+    public function gc($maxlifetime)
+    {
         /*
          * 取出所有的 带有指定前缀的键
          */

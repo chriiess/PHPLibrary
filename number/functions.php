@@ -39,7 +39,8 @@ echo (NumToCNMoney(99999999999, 1, 0) . "<br>");
 玖佰玖拾玖億玖仟玖佰玖拾玖萬玖仟玖佰玖拾玖元
 
  */
-function NumToCNMoney($num, $mode = true, $sim = true) {
+function NumToCNMoney($num, $mode = true, $sim = true)
+{
 
     if (!is_numeric($num)) {
         return '含有非数字非小数点字符！';

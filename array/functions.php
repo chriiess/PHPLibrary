@@ -1,11 +1,7 @@
 <?php
 
 /**
- * #######################################
- *
  * 数组处理相关代码片段
- *
- * #######################################
  */
 
 /**
@@ -15,7 +11,8 @@
  * @param string $pid parent标记字段
  * @return array $tree 树形结构数组
  */
-function listToTree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root = 0) {
+function listToTree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root = 0)
+{
 
     // 创建Tree
     $tree = array();
@@ -46,7 +43,8 @@ function listToTree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root = 
  * @param $d object 对象
  * @return array 数组
  */
-function objectToArray($d) {
+function objectToArray($d)
+{
     if (is_object($d)) {
         // Gets the properties of the given object
         // with get_object_vars function
@@ -70,7 +68,8 @@ function objectToArray($d) {
  * @param $d array 数组
  * @return object 对象
  */
-function arrayToObject($d) {
+function arrayToObject($d)
+{
     if (is_array($d)) {
         /*
          * Return array converted to object
@@ -104,7 +103,8 @@ function arrayToObject($d) {
  * @param int|string $key         $items子数组里面的键名
  * @return array
  */
-function getDictionary(Array $items, $key) {
+function getDictionary(array $items, $key)
+{
     $dictionary = [];
     foreach ($items as $value) {
         $dictionary[$value[$key]] = $value;

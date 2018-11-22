@@ -8,4 +8,4 @@
 
 
 ### class
-ArrayHelper.class.php 数组类助手 
+ArrayHelper.class.php 数组类助手

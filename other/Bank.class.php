@@ -1,6 +1,7 @@
 <?php
 
-class Bank {
+class Bank
+{
 
     public $bankList = [
         '621098' => '邮储银行-绿卡通-借记卡',
@@ -2789,7 +2790,8 @@ class Bank {
      * User: Administrator
      * DateTime: 2014/12/31 10:01
      */
-    public function bankInfo($card) {
+    public function bankInfo($card)
+    {
         $card_8 = substr($card, 0, 8);
         if (isset($this->bankList[$card_8])) {
             echo $bankList[$card_8];

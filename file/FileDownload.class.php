@@ -6,14 +6,16 @@
  * @author albafica.wang
  * @createdate 2014/12/29
  */
-class FileDownload {
+class FileDownload
+{
 
     private $filter = array(); //过滤器，标志禁止下载文件类型，为空则可以下载所有文件
     private $errMsg = ''; //错误信息
     private $mineType = ''; //文件拓展类型
     private $fileType = array();
 
-    public function __construct($fileFilter = '') {
+    public function __construct($fileFilter = '')
+    {
         $this->setFilter($fileFilter);
         $this->setFileType();
     }
@@ -23,7 +25,8 @@ class FileDownload {
      * @param string $filePath              文件路径
      * @param string $fileName              文件保存名，如果为空，则从路径中获取保存的名字
      */
-    public function downloadFile($filePath, $downLoadName = '') {
+    public function downloadFile($filePath, $downLoadName = '')
+    {
         //文件验证失败
         if (!$this->fileCheck($filePath)) {
             return false;
@@ -47,7 +50,8 @@ class FileDownload {
      * 设置文件过滤器，定义禁止下载的文件类型,可以在下载前动态定义
      * @param string $fileFilter            字符串定义的文件下载类型，用逗号分隔
      */
-    public function setFilter($fileFilter) {
+    public function setFilter($fileFilter)
+    {
         if (empty($fileFilter)) {
             return;
         }
@@ -58,7 +62,8 @@ class FileDownload {
      * 获取错误信息
      * @return string
      */
-    public function getErrMsg() {
+    public function getErrMsg()
+    {
         return $this->errMsg;
     }
 
@@ -67,7 +72,8 @@ class FileDownload {
      * @param string $filePath      文件路径
      * @return boolean
      */
-    private function fileCheck($filePath) {
+    private function fileCheck($filePath)
+    {
         if (!file_exists($filePath)) {
             $this->errMsg = $filePath . '不存在!';
             return false;
@@ -97,7 +103,8 @@ class FileDownload {
     /**
      * 设置文件类型拓展,用于验证文件类型是否正确
      */
-    private function setFileType() {
+    private function setFileType()
+    {
         $this->fileType['chm'] = 'application/octet-stream';
         $this->fileType['ppt'] = 'application/vnd.ms-powerpoint';
         $this->fileType['xls'] = 'application/vnd.ms-excel';

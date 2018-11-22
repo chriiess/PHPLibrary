@@ -1,8 +1,6 @@
-### API服务代码片段
-### functions.php
+### 其他代码片段
 
-
-### class
+### other
 
 * Bank.class.php  银行卡信息查询类
 * IdCard.class.php 身份证信息查询类

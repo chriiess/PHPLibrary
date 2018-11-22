@@ -1,9 +1,11 @@
 <?php
 
-class IdCard {
+class IdCard
+{
 
     // 根据身份证号，自动返回对应的星座
-    public function get_xingzuo($cid) {
+    public function getXingzuo($cid)
+    {
 
         if (!$this->isIdCard($cid)) {
             return;
@@ -42,7 +44,8 @@ class IdCard {
     }
 
     // 根据身份证号，自动返回对应的生肖
-    public function get_shengxiao($cid) {
+    public function getShengxiao($cid)
+    {
 
         if (!$this->isIdCard($cid)) {
             return;
@@ -68,7 +71,8 @@ class IdCard {
     }
 
     //根据身份证号，自动返回性别
-    public function get_xingbie($cid, $comm = 0) {
+    public function getXingbie($cid, $comm = 0)
+    {
 
         if (!$this->isIdCard($cid)) {
             return;
@@ -82,7 +86,8 @@ class IdCard {
         }
     }
 
-    public function isIdCard($number) {
+    public function isIdCard($number)
+    {
 
         // 转化为大写，如出现x
         $number = strtoupper($number);

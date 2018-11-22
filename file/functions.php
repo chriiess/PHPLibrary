@@ -1,17 +1,14 @@
 <?php
 
 /**
- * #######################################
- *
  * 文件处理相关代码片段
- *
- * #######################################
  */
 
 /**
  * 在一个目录中列出所有文件和文件夹
  */
-function list_files($dir) {
+function listFiles($dir)
+{
     if (is_dir($dir)) {
         if ($handle = opendir($dir)) {
             while (($file = readdir($handle)) !== false) {

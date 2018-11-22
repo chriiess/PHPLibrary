@@ -3,7 +3,8 @@
 /**
  * 数据库操作类
  */
-class Db {
+class Db
+{
     protected $config = array(
         'dsn' => '',
         'type' => 'mysql',
@@ -46,7 +47,8 @@ class Db {
     /**
      * 私有化构造函数，使用单例模式
      */
-    private function __construct($config = '') {
+    private function __construct($config = '')
+    {
         $this->config = $this->parseConfig($config);
     }
 
@@ -55,18 +57,21 @@ class Db {
      * @access public static
      * @return Db
      */
-    public static function Instance() {
+    public static function Instance()
+    {
         if (self::$_instance instanceof self) {
             return self::$_instance;
         }
         self::$_instance = new self;
         return self::$_instance;
     }
-    public function getLinkId() {
+    public function getLinkId()
+    {
         $this->parseConnect(false);
         return $this->link;
     }
-    public function getlinks() {
+    public function getlinks()
+    {
         return $this->_links;
     }
     /**
@@ -77,7 +82,8 @@ class Db {
      *
      * @return mixed
      */
-    protected function query($sql, $getsql = false) {
+    protected function query($sql, $getsql = false)
+    {
         $this->parseConnect(false);
         /*
          * 判断连接资源是否存在
@@ -144,7 +150,8 @@ class Db {
      *
      * @return mixed
      */
-    protected function execute($sql, $getsql = false) {
+    protected function execute($sql, $getsql = false)
+    {
         $this->parseConnect(true);
         if (!$this->link) {
             return false;
@@ -199,7 +206,8 @@ class Db {
             return $this->affectNum;
         }
     }
-    public function sql($sql = '') {
+    public function sql($sql = '')
+    {
         if (empty($sql)) {
             return false;
         }
@@ -216,14 +224,16 @@ class Db {
      * @param string $key
      * @param mixed $val
      */
-    private function bindParams($key, $val) {
+    private function bindParams($key, $val)
+    {
         $this->bind[":" . $key] = $val;
     }
     /**
      * 解析绑定的参数,如果参数不为空则合并参数
      * @param unknown $bind
      */
-    private function parseBind($bind = array()) {
+    private function parseBind($bind = array())
+    {
         if (is_array($bind)) {
             $this->bind = array_merge($this->bind, $bind);
         }
@@ -234,7 +244,8 @@ class Db {
      * @param array $options
      * @return mixed
      */
-    protected function insert($data = array(), $options = array()) {
+    protected function insert($data = array(), $options = array())
+    {
         $values = $fields = array();
         $this->parseBind(isset($options['bind']) ? $options['bind'] : array());
         foreach ($data as $key => $val) {
@@ -260,7 +271,8 @@ class Db {
      * @param string $table
      * @return Db   返回当前对象
      */
-    public function table($table = '') {
+    public function table($table = '')
+    {
         if ($table == '') {
             $table = $this->options['table'];
         }
@@ -279,7 +291,8 @@ class Db {
      * @param string $dbname 指定数据库
      * @return Ambigous <boolean, string, unknown>
      */
-    public function getTables($dbname = '') {
+    public function getTables($dbname = '')
+    {
         $sql = !empty($dbname) ? "SHOW TABLES FROM " . $dbname : "SHOW TABLES";
         $result = $this->query($sql);
         $tables = array();
@@ -293,7 +306,8 @@ class Db {
      * @access public
      * @return int
      */
-    public function getRowNum() {
+    public function getRowNum()
+    {
         if (!empty($this->affectNum)) {
             return $this->affectNum;
         }
@@ -304,7 +318,8 @@ class Db {
      * @param string $field
      * @return Db   返回当前对象
      */
-    public function field($field = '') {
+    public function field($field = '')
+    {
         /* if(!empty($field)){
         $f = array();
         foreach($this->options['fields'] as $key=>$val){
@@ -323,7 +338,8 @@ class Db {
      * @param string $where
      * @return Db
      */
-    public function where($where = '') {
+    public function where($where = '')
+    {
         if (is_string($where)) {
             $this->options['where'] = $where;
         } elseif (is_array($where)) {
@@ -342,7 +358,8 @@ class Db {
      * @param unknown $options
      * @return Ambigous <mixed, boolean, string, string, unknown>
      */
-    public function select($options = array()) {
+    public function select($options = array())
+    {
         $this->parseBind(isset($options['bind']) ? $options['bind'] : array());
         /*
          * 判断是否有分页
@@ -359,7 +376,8 @@ class Db {
      * @param array $options
      * @return boolean|unknown
      */
-    public function find($options = array()) {
+    public function find($options = array())
+    {
         $this->parseBind(isset($options['bind']) ? $options['bind'] : array());
         /*
          * 判断是否有分页
@@ -383,7 +401,8 @@ class Db {
      * @param array $options
      * @return boolean|Ambigous <mixed, boolean, string, string>
      */
-    public function add($data = array(), $options = array()) {
+    public function add($data = array(), $options = array())
+    {
         if (isset($options['table'])) {
             $this->table($options['table']);
         }
@@ -408,7 +427,8 @@ class Db {
      * @param array $options
      * @return boolean
      */
-    public function addMore($data = array(), $options = array()) {
+    public function addMore($data = array(), $options = array())
+    {
         if (isset($options['table'])) {
             $this->table($options['table']);
         }
@@ -448,7 +468,8 @@ class Db {
      * @param unknown $data
      * @param unknown $options
      */
-    public function update($data = array(), $options = array()) {
+    public function update($data = array(), $options = array())
+    {
         $values = $fields = $set = array();
         if (is_array($options)) {
             $options = array_merge($options, $this->options);
@@ -481,7 +502,8 @@ class Db {
         return $this->execute($sql);
     }
 
-    public function delete($options = array()) {
+    public function delete($options = array())
+    {
         if (isset($options['table'])) {
             $this->table($options['table']);
         }
@@ -498,7 +520,8 @@ class Db {
      * 解析limit函数
      * @return string
      */
-    private function parseLimit() {
+    private function parseLimit()
+    {
         $limit = '';
         if (isset($this->options['limit']) && !empty($this->options['limit'])) {
             $order = " LIMIT " . $this->options['limit'];
@@ -511,7 +534,8 @@ class Db {
      * @param unknown $options
      * @return string
      */
-    public function buildSql($options = array()) {
+    public function buildSql($options = array())
+    {
         if (is_array($options)) {
             $options = array_merge($options, $this->options);
         }
@@ -526,7 +550,8 @@ class Db {
      * @param string $order
      * @return Db
      */
-    public function orderBy($order = '') {
+    public function orderBy($order = '')
+    {
         $this->options['order'] = $order;
         return $this;
     }
@@ -536,7 +561,8 @@ class Db {
      * @param string $limit
      * @return Db
      */
-    public function limit($limit = '') {
+    public function limit($limit = '')
+    {
         if (is_array($limit)) {
             list($page, $listrows) = $limit;
             $page = $page > 0 ? $page : 1;
@@ -553,7 +579,8 @@ class Db {
      * @param string $table
      * @return boolean
      */
-    public function parseFields($table = '') {
+    public function parseFields($table = '')
+    {
         if (empty($table)) {
             $table = $this->options['table'];
         }
@@ -582,7 +609,8 @@ class Db {
      * 解析where函数
      * @return string
      */
-    private function parseWhere() {
+    private function parseWhere()
+    {
         $where = '';
         if (isset($this->options['where']) && !empty($this->options['where'])) {
             $where = " WHERE " . $this->options['where'];
@@ -594,7 +622,8 @@ class Db {
      * 解析order函数
      * @return string
      */
-    private function parseOrder() {
+    private function parseOrder()
+    {
         $order = '';
         if (isset($this->options['order']) && !empty($this->options['order'])) {
             $order = " ORDER BY " . $this->options['order'];
@@ -607,7 +636,8 @@ class Db {
      * @param string $master   主服务器操作还是从服务器操作
      * @return
      */
-    private function parseConnect($master = true) {
+    private function parseConnect($master = true)
+    {
         if ($this->config['deploy_type'] == 1) {
             //分布式部署
             $this->link = $this->multiConnect($master);
@@ -632,7 +662,8 @@ class Db {
      *
      * @return string|boolean|multitype:
      */
-    private function connect($config = '', $identify = 0, $reconnect = false) {
+    private function connect($config = '', $identify = 0, $reconnect = false)
+    {
         if (!isset($this->_links[$identify])) {
             if (empty($config)) {
                 $config = $this->config;
@@ -659,7 +690,8 @@ class Db {
      * @param string $master   主服务器操作还是从服务器操作
      * @return mixed
      */
-    private function multiConnect($master = false) {
+    private function multiConnect($master = false)
+    {
         $config['host'] = explode(',', $this->config['host']);
         $config['dbname'] = explode(',', $this->config['dbname']);
         $config['port'] = empty($this->config['port']) ? null : explode(',', $this->config['port']);
@@ -772,7 +804,8 @@ class Db {
      * 解析配置数据
      * @param string $config
      */
-    protected function parseConfig($config = '') {
+    protected function parseConfig($config = '')
+    {
         if (empty($config)) {
             $config = $this->config;
         } else {
@@ -785,7 +818,8 @@ class Db {
      * 解析dsn
      * @param string $config
      */
-    protected function parseDsn($config = '') {
+    protected function parseDsn($config = '')
+    {
         if (empty($config)) {
             $config = $this->config;
         }
@@ -810,7 +844,8 @@ class Db {
      * @access public
      * @return void|boolean
      */
-    public function startTransaction() {
+    public function startTransaction()
+    {
         $this->starttrans = true;
         $this->parseConnect();
         if (empty($this->link)) {
@@ -830,7 +865,8 @@ class Db {
      * @access public
      * @return boolean
      */
-    public function rollback() {
+    public function rollback()
+    {
         if ($this->transnum > 0) {
             //如果事务指令数大于0 则回滚事务 并且将事务指令数置为0
             $res = $this->link->rollBack();
@@ -848,7 +884,8 @@ class Db {
      * @access public
      * @return boolean
      */
-    public function commit() {
+    public function commit()
+    {
         if ($this->transnum > 0) {
             //如果事务指令数大于0 则提交事务 并且将事务指令数置为0
             $res = $this->link->commit();
@@ -863,13 +900,15 @@ class Db {
     /**
      * 释放查询
      */
-    private function free() {
+    private function free()
+    {
         $this->PDOstatement = null;
     }
     /**
      * 关闭连接
      */
-    private function close() {
+    private function close()
+    {
         $this->link = null;
     }
 }

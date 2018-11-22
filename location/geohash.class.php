@@ -24,11 +24,13 @@
  * Encode and decode geohashes
  *
  */
-class Geohash {
+class Geohash
+{
     private $coding = "0123456789bcdefghjkmnpqrstuvwxyz";
     private $codingMap = array();
 
-    public function Geohash() {
+    public function Geohash()
+    {
         //build map from encoding char to 0 padded bitfield
         for ($i = 0; $i < 32; $i++) {
             $this->codingMap[substr($this->coding, $i, 1)] = str_pad(decbin($i), 5, "0", STR_PAD_LEFT);
@@ -39,7 +41,8 @@ class Geohash {
     /**
      * Decode a geohash and return an array with decimal lat,long in it
      */
-    public function decode($hash) {
+    public function decode($hash)
+    {
         //decode hash into binary string
         $binary = "";
         $hl = strlen($hash);
@@ -83,7 +86,8 @@ class Geohash {
     /**
      * Encode a hash from given lat and long
      */
-    public function encode($lat, $long) {
+    public function encode($lat, $long)
+    {
         //how many bits does latitude need?
         $plat = $this->precision($lat);
         $latbits = 1;
@@ -148,7 +152,8 @@ class Geohash {
     /**
      * What's the maximum error for $bits bits covering a range $min to $max
      */
-    private function calcError($bits, $min, $max) {
+    private function calcError($bits, $min, $max)
+    {
         $err = ($max - $min) / 2;
         while ($bits--) {
             $err /= 2;
@@ -163,7 +168,8 @@ class Geohash {
      * precision of 42.4 is 0.05
      * precision of 42.41 is 0.005 etc
      */
-    private function precision($number) {
+    private function precision($number)
+    {
         $precision = 0;
         $pt = strpos($number, '.');
         if ($pt !== false) {
@@ -177,7 +183,8 @@ class Geohash {
      * create binary encoding of number as detailed in http://en.wikipedia.org/wiki/Geohash#Example
      * removing the tail recursion is left an exercise for the reader
      */
-    private function binEncode($number, $min, $max, $bitcount) {
+    private function binEncode($number, $min, $max, $bitcount)
+    {
         if ($bitcount == 0) {
             return "";
         }
@@ -199,7 +206,8 @@ class Geohash {
      * decodes binary encoding of number as detailed in http://en.wikipedia.org/wiki/Geohash#Example
      * removing the tail recursion is left an exercise for the reader
      */
-    private function binDecode($binary, $min, $max) {
+    private function binDecode($binary, $min, $max)
+    {
         $mid = ($min + $max) / 2;
 
         if (strlen($binary) == 0) {
@@ -217,4 +225,3 @@ class Geohash {
 
     }
 }
-?>

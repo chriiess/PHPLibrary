@@ -1,11 +1,7 @@
 <?php
 
 /**
- * #######################################
- *
  * 地理位置相关代码片段
- *
- * #######################################
  */
 
 /**
@@ -13,10 +9,11 @@
  * @param integer $type 返回类型 0 返回IP地址 1 返回IPV4地址数字
  * @return mixed
  */
-function getClientIp($type = 0) {
+function getClientIp($type = 0)
+{
     $type = $type ? 1 : 0;
-    static $ip = NULL;
-    if ($ip !== NULL) {
+    static $ip = null;
+    if ($ip !== null) {
         return $ip[$type];
     }
 
@@ -65,7 +62,8 @@ function getClientIp($type = 0) {
  *         meters: 4,188.3894  //米
  *
  */
-function getDistanceBetweenPointsNew($latitude1, $longitude1, $latitude2, $longitude2) {
+function getDistanceBetweenPointsNew($latitude1, $longitude1, $latitude2, $longitude2)
+{
     $theta = $longitude1 - $longitude2;
     $miles = (sin(deg2rad($latitude1)) * sin(deg2rad($latitude2))) + (cos(deg2rad($latitude1)) * cos(deg2rad($latitude2)) * cos(deg2rad($theta)));
     $miles = acos($miles);
@@ -91,7 +89,8 @@ function getDistanceBetweenPointsNew($latitude1, $longitude1, $latitude2, $longi
  *
  *          中国广东省广州市 电信
  */
-function getIPLocQQ($queryIP) {
+function getIPLocQQ($queryIP)
+{
     $url = 'http://ip.qq.com/cgi-bin/searchip?searchip1=' . $queryIP;
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_ENCODING, 'gb2312');
@@ -118,7 +117,8 @@ function getIPLocQQ($queryIP) {
  *
  *          中国广东广州
  */
-function getIPLocSina($queryIP) {
+function getIPLocSina($queryIP)
+{
     $url = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=' . $queryIP;
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_ENCODING, 'utf8');
@@ -129,7 +129,7 @@ function getIPLocSina($queryIP) {
     curl_close($ch);
 
     $loc = "";
-    if ($location === FALSE) {
+    if ($location === false) {
         return "";
     }
 

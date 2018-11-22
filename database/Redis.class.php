@@ -1,19 +1,18 @@
 <?php
 
 /**
- *
  * Redis类 PHP封装的操作Redis类
- *
  */
-class Redis {
+class Redis
+{
 
-    const Arrays = '*'; //RESP Arrays类型
-    const Bulk = '$'; //RESP Bulk Strings 类型
-    const Integer = ':'; //RESP 整型数据
-    const Simple = '+'; //RESP Simple Strings类型
-    const Errors = '-'; //RESP Errors 错误类型
+    const ARRAYS = '*'; //RESP Arrays类型
+    const BULK = '$'; //RESP Bulk Strings 类型
+    const INTEGER = ':'; //RESP 整型数据
+    const SIMPLE = '+'; //RESP Simple Strings类型
+    const ERRORS = '-'; //RESP Errors 错误类型
 
-    const crlf = "\r\n";
+    const CRLF = "\r\n";
 
     private $handle;
 
@@ -29,7 +28,8 @@ class Redis {
 
     private $connect_timeout = 3;
 
-    public function __construct($host, $port, $slient_fail = false, $timeout = 60) {
+    public function __construct($host, $port, $slient_fail = false, $timeout = 60)
+    {
         if ($host && $port) {
             $this->connect($host, $port, $slient_fail, $timeout);
         }
@@ -42,7 +42,8 @@ class Redis {
      * @param string $quiet_fail   是否屏蔽连接异常信息
      * @param number $timeout  设置读取资源超时时间
      */
-    private function connect($host = '127.0.0.1', $port = 6379, $quiet_fail = false, $timeout = 60) {
+    private function connect($host = '127.0.0.1', $port = 6379, $quiet_fail = false, $timeout = 60)
+    {
         $this->host = $host;
         $this->port = $port;
         $this->quiet_fail = $quiet_fail;
@@ -64,7 +65,8 @@ class Redis {
     /**
      * 重新连接服务器函数
      */
-    public function reconnect() {
+    public function reconnect()
+    {
         $this->__destruct();
         $this->connect($this->host, $this->port, $this->quiet_fail, $this->timeout);
     }
@@ -73,7 +75,8 @@ class Redis {
      * 构造发送命令函数
      * @return Redis
      */
-    public function command() {
+    public function command()
+    {
         if (!$this->handle) {
             return $this;
         }
@@ -93,7 +96,8 @@ class Redis {
      *
      * @return int
      */
-    public function exec() {
+    public function exec()
+    {
         $count = sizeof($this->commands);
         if ($count < 1) {
             return false;
@@ -112,25 +116,26 @@ class Redis {
      * 得到结果函数
      * @return boolean
      */
-    public function result() {
+    public function result()
+    {
         $result = false;
         $char = fgetc($this->handle);
         switch ($char) {
-        case self::Simple:
-            $result = $this->Simple_result();
-            break;
-        case self::Bulk:
-            $result = $this->Bulk_result();
-            break;
-        case self::Arrays:
-            $result = $this->Arrays_result();
-            break;
-        case self::Errors:
-            $result = $this->Errors_result();
-            break;
-        case self::Integer:
-            $result = $this->Integer_result();
-            break;
+            case self::Simple:
+                $result = $this->simpleResult();
+                break;
+            case self::Bulk:
+                $result = $this->bulkResult();
+                break;
+            case self::Arrays:
+                $result = $this->arraysResult();
+                break;
+            case self::Errors:
+                $result = $this->errorsResult();
+                break;
+            case self::Integer:
+                $result = $this->integerResult();
+                break;
 
         }
         return $result;
@@ -141,7 +146,8 @@ class Redis {
      *
      * @return string
      */
-    private function Simple_result() {
+    private function simpleResult()
+    {
 
         return trim(fgets($this->handle));
 
@@ -151,7 +157,8 @@ class Redis {
      * 处理 Bulk Strings 类型的数据
      * @return boolean|unknown
      */
-    private function Bulk_result() {
+    private function bulkResult()
+    {
 
         $result = trim(fgets($this->handle));
 
@@ -160,7 +167,7 @@ class Redis {
             return false;
         }
 
-        $result = $this->read_bulk_result($result);
+        $result = $this->readBulkResult($result);
 
         return $result;
 
@@ -170,7 +177,8 @@ class Redis {
      * 处理 Arrays 类型的数据
      * @return boolean|multitype:NULL
      */
-    private function Arrays_result() {
+    private function arraysResult()
+    {
         $size = trim(fgets($this->handle));
         if ($size === -1) {
             $this->errinfo = 'Nothing Replied';
@@ -182,7 +190,7 @@ class Redis {
             if ($r === -1) {
                 return false;
             }
-            $result[] = $this->read_bulk_result($r);
+            $result[] = $this->readBulkResult($r);
         }
         return $result;
 
@@ -193,7 +201,8 @@ class Redis {
      *
      * @return string
      */
-    private function Integer_result() {
+    private function integerResult()
+    {
         return intval(trim(fgets($this->handle)));
     }
 
@@ -201,7 +210,8 @@ class Redis {
      * 错误处理函数
      * @return boolean
      */
-    private function Errors_result() {
+    private function errorsResult()
+    {
         $this->result = false;
         $err = fgets($this->handle);
         if ($this->setError_func) {
@@ -211,7 +221,8 @@ class Redis {
         return false;
 
     }
-    private function read_bulk_result($r) {
+    private function readBulkResult($r)
+    {
         $result = null;
         $read = 0;
         $size = (strlen($r) > 1 && substr($r, 0, 1) == self::Bulk) ? substr($r, 1) : $r;
@@ -230,7 +241,8 @@ class Redis {
     /**
      * 析构函数
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         if (is_resource($this->handle)) {
             fclose($this->handle);
         }
@@ -239,11 +251,13 @@ class Redis {
      * 设置错误处理函数
      * @param unknown $function
      */
-    public function setError_func($function) {
+    public function seterrorFunc($function)
+    {
         $this->setError_func = $function;
     }
 
-    public function get_errinfo() {
+    public function getErrinfo()
+    {
         return $this->errinfo;
     }
 }
@@ -251,4 +265,4 @@ class Redis {
 $obj = new Redis('192.168.144.133', 6379);
 $obj->command('get', 'mykey', 'hello')->exec();
 var_dump($obj->result());
-echo $obj->get_errinfo();
+echo $obj->getErrinfo();

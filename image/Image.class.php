@@ -2,11 +2,12 @@
 
 /**
  * Description of Image
- *  图形处理类,采用GD库进行图像处理
+ * 图形处理类,采用GD库进行图像处理
  * @author albafica.wang
  * @createdate 2014/11/05
  */
-class Image {
+class Image
+{
     /* 缩略图相关常量定义 */
 
     const IMAGE_THUMB_SCALE = 1; //常量，标识缩略图等比例缩放类型
@@ -44,7 +45,8 @@ class Image {
      *
      * @param type $imgName
      */
-    public function __construct($imgName) {
+    public function __construct($imgName)
+    {
         $this->open($imgName);
     }
 
@@ -52,7 +54,8 @@ class Image {
      * 打开一张图像
      * @param  string $imgname 图像路径
      */
-    private function open($imgname) {
+    private function open($imgname)
+    {
         //检测图像文件
         if (!is_file($imgname)) {
             throw new Exception('图像不存在');
@@ -97,7 +100,8 @@ class Image {
      * @param  integer $quality   图像质量
      * @param  boolean $interlace 是否对JPEG类型图像设置隔行扫描
      */
-    public function save($imgname, $type = null, $quality = 80, $interlace = true) {
+    public function save($imgname, $type = null, $quality = 80, $interlace = true)
+    {
         if (empty($this->img)) {
             throw new Exception('没有可以保存的图像资源');
         }
@@ -123,7 +127,8 @@ class Image {
      * 返回图像宽度
      * @return integer 图像宽度
      */
-    public function getWidth() {
+    public function getWidth()
+    {
         if (empty($this->img)) {
             throw new Exception('没有指定图像资源');
         }
@@ -134,7 +139,8 @@ class Image {
      * 返回图像高度
      * @return integer 图像高度
      */
-    public function getHeight() {
+    public function getHeight()
+    {
         if (empty($this->img)) {
             throw new Exception('没有指定图像资源');
         }
@@ -145,7 +151,8 @@ class Image {
      * 返回图像类型
      * @return string 图像类型
      */
-    public function getType() {
+    public function getType()
+    {
         if (empty($this->img)) {
             throw new Exception('没有指定图像资源');
         }
@@ -156,7 +163,8 @@ class Image {
      * 返回图像MIME类型
      * @return string 图像MIME类型
      */
-    public function getMime() {
+    public function getMime()
+    {
         if (empty($this->img)) {
             throw new Exception('没有指定图像资源');
         }
@@ -167,7 +175,8 @@ class Image {
      * 返回图像尺寸数组 0 - 图像宽度，1 - 图像高度
      * @return array 图像尺寸
      */
-    public function getSize() {
+    public function getSize()
+    {
         if (empty($this->img)) {
             throw new Exception('没有指定图像资源');
         }
@@ -183,7 +192,8 @@ class Image {
      * @param  integer $width  图像保存宽度
      * @param  integer $height 图像保存高度
      */
-    public function crop($w, $h, $x = 0, $y = 0, $width = null, $height = null) {
+    public function crop($w, $h, $x = 0, $y = 0, $width = null, $height = null)
+    {
         if (empty($this->img)) {
             throw new Exception('没有可以被裁剪的图像资源');
         }
@@ -216,7 +226,8 @@ class Image {
      * @param  integer $height 缩略图最大高度
      * @param  integer $type   缩略图裁剪类型
      */
-    public function thumb($width, $height, $type = Image::IMAGE_THUMB_SCALE) {
+    public function thumb($width, $height, $type = Image::IMAGE_THUMB_SCALE)
+    {
         if (empty($this->img)) {
             throw new Exception('没有可以被缩略的图像资源');
         }
@@ -227,82 +238,82 @@ class Image {
 
         /* 计算缩略图生成的必要参数 */
         switch ($type) {
-        /* 等比例缩放 */
-        case Image::IMAGE_THUMB_SCALE:
-            //原图尺寸小于缩略图尺寸则不进行缩略
-            if ($w < $width && $h < $height) {
-                return;
-            }
+            /* 等比例缩放 */
+            case Image::IMAGE_THUMB_SCALE:
+                //原图尺寸小于缩略图尺寸则不进行缩略
+                if ($w < $width && $h < $height) {
+                    return;
+                }
 
-            //计算缩放比例
-            $scale = min($width / $w, $height / $h);
-            //设置缩略图的坐标及宽度和高度
-            $x = $y = 0;
-            $width = $w * $scale;
-            $height = $h * $scale;
-            break;
-        /* 居中裁剪 */
-        case Image::IMAGE_THUMB_CENTER:
-            //计算缩放比例
-            $scale = max($width / $w, $height / $h);
-            //设置缩略图的坐标及宽度和高度
-            $w = $width / $scale;
-            $h = $height / $scale;
-            $x = ($this->info['width'] - $w) / 2;
-            $y = ($this->info['height'] - $h) / 2;
-            break;
-        /* 左上角裁剪 */
-        case Image::IMAGE_THUMB_NORTHWEST:
-            //计算缩放比例
-            $scale = max($width / $w, $height / $h);
-            //设置缩略图的坐标及宽度和高度
-            $x = $y = 0;
-            $w = $width / $scale;
-            $h = $height / $scale;
-            break;
-        /* 右下角裁剪 */
-        case Image::IMAGE_THUMB_SOUTHEAST:
-            //计算缩放比例
-            $scale = max($width / $w, $height / $h);
-            //设置缩略图的坐标及宽度和高度
-            $w = $width / $scale;
-            $h = $height / $scale;
-            $x = $this->info['width'] - $w;
-            $y = $this->info['height'] - $h;
-            break;
-        /* 填充 */
-        case Image::IMAGE_THUMB_FILLED:
-            //计算缩放比例
-            if ($w < $width && $h < $height) {
-                $scale = 1;
-            } else {
+                //计算缩放比例
                 $scale = min($width / $w, $height / $h);
-            }
-            //设置缩略图的坐标及宽度和高度
-            $neww = $w * $scale;
-            $newh = $h * $scale;
-            $posx = ($width - $w * $scale) / 2;
-            $posy = ($height - $h * $scale) / 2;
-            do {
-                //创建新图像
-                $img = imagecreatetruecolor($width, $height);
-                // 调整默认颜色
-                $color = imagecolorallocate($img, 255, 255, 255);
-                imagefill($img, 0, 0, $color);
-                //裁剪
-                imagecopyresampled($img, $this->img, $posx, $posy, $x, $y, $neww, $newh, $w, $h);
-                imagedestroy($this->img); //销毁原图
-                $this->img = $img;
-            } while (!empty($this->gif) && $this->gifNext());
-            $this->info['width'] = $width;
-            $this->info['height'] = $height;
-            return;
-        /* 固定 */
-        case Image::IMAGE_THUMB_FIXED:
-            $x = $y = 0;
-            break;
-        default:
-            throw new Exception('不支持的缩略图裁剪类型');
+                //设置缩略图的坐标及宽度和高度
+                $x = $y = 0;
+                $width = $w * $scale;
+                $height = $h * $scale;
+                break;
+            /* 居中裁剪 */
+            case Image::IMAGE_THUMB_CENTER:
+                //计算缩放比例
+                $scale = max($width / $w, $height / $h);
+                //设置缩略图的坐标及宽度和高度
+                $w = $width / $scale;
+                $h = $height / $scale;
+                $x = ($this->info['width'] - $w) / 2;
+                $y = ($this->info['height'] - $h) / 2;
+                break;
+            /* 左上角裁剪 */
+            case Image::IMAGE_THUMB_NORTHWEST:
+                //计算缩放比例
+                $scale = max($width / $w, $height / $h);
+                //设置缩略图的坐标及宽度和高度
+                $x = $y = 0;
+                $w = $width / $scale;
+                $h = $height / $scale;
+                break;
+            /* 右下角裁剪 */
+            case Image::IMAGE_THUMB_SOUTHEAST:
+                //计算缩放比例
+                $scale = max($width / $w, $height / $h);
+                //设置缩略图的坐标及宽度和高度
+                $w = $width / $scale;
+                $h = $height / $scale;
+                $x = $this->info['width'] - $w;
+                $y = $this->info['height'] - $h;
+                break;
+            /* 填充 */
+            case Image::IMAGE_THUMB_FILLED:
+                //计算缩放比例
+                if ($w < $width && $h < $height) {
+                    $scale = 1;
+                } else {
+                    $scale = min($width / $w, $height / $h);
+                }
+                //设置缩略图的坐标及宽度和高度
+                $neww = $w * $scale;
+                $newh = $h * $scale;
+                $posx = ($width - $w * $scale) / 2;
+                $posy = ($height - $h * $scale) / 2;
+                do {
+                    //创建新图像
+                    $img = imagecreatetruecolor($width, $height);
+                    // 调整默认颜色
+                    $color = imagecolorallocate($img, 255, 255, 255);
+                    imagefill($img, 0, 0, $color);
+                    //裁剪
+                    imagecopyresampled($img, $this->img, $posx, $posy, $x, $y, $neww, $newh, $w, $h);
+                    imagedestroy($this->img); //销毁原图
+                    $this->img = $img;
+                } while (!empty($this->gif) && $this->gifNext());
+                $this->info['width'] = $width;
+                $this->info['height'] = $height;
+                return;
+            /* 固定 */
+            case Image::IMAGE_THUMB_FIXED:
+                $x = $y = 0;
+                break;
+            default:
+                throw new Exception('不支持的缩略图裁剪类型');
         }
 
         /* 裁剪图像 */
@@ -315,7 +326,8 @@ class Image {
      * @param  integer $locate 水印位置
      * @param  integer $alpha  水印透明度
      */
-    public function water($source, $locate = Image::IMAGE_WATER_SOUTHEAST, $alpha = 80) {
+    public function water($source, $locate = Image::IMAGE_WATER_SOUTHEAST, $alpha = 80)
+    {
         //资源检测
         if (empty($this->img)) {
             throw new Exception('没有可以被添加水印的图像资源');
@@ -339,66 +351,66 @@ class Image {
 
         /* 设定水印位置 */
         switch ($locate) {
-        /* 右下角水印 */
-        case Image::IMAGE_WATER_SOUTHEAST:
-            $x = $this->info['width'] - $info[0];
-            $y = $this->info['height'] - $info[1];
-            break;
+            /* 右下角水印 */
+            case Image::IMAGE_WATER_SOUTHEAST:
+                $x = $this->info['width'] - $info[0];
+                $y = $this->info['height'] - $info[1];
+                break;
 
-        /* 左下角水印 */
-        case Image::IMAGE_WATER_SOUTHWEST:
-            $x = 0;
-            $y = $this->info['height'] - $info[1];
-            break;
+            /* 左下角水印 */
+            case Image::IMAGE_WATER_SOUTHWEST:
+                $x = 0;
+                $y = $this->info['height'] - $info[1];
+                break;
 
-        /* 左上角水印 */
-        case Image::IMAGE_WATER_NORTHWEST:
-            $x = $y = 0;
-            break;
+            /* 左上角水印 */
+            case Image::IMAGE_WATER_NORTHWEST:
+                $x = $y = 0;
+                break;
 
-        /* 右上角水印 */
-        case Image::IMAGE_WATER_NORTHEAST:
-            $x = $this->info['width'] - $info[0];
-            $y = 0;
-            break;
+            /* 右上角水印 */
+            case Image::IMAGE_WATER_NORTHEAST:
+                $x = $this->info['width'] - $info[0];
+                $y = 0;
+                break;
 
-        /* 居中水印 */
-        case Image::IMAGE_WATER_CENTER:
-            $x = ($this->info['width'] - $info[0]) / 2;
-            $y = ($this->info['height'] - $info[1]) / 2;
-            break;
+            /* 居中水印 */
+            case Image::IMAGE_WATER_CENTER:
+                $x = ($this->info['width'] - $info[0]) / 2;
+                $y = ($this->info['height'] - $info[1]) / 2;
+                break;
 
-        /* 下居中水印 */
-        case Image::IMAGE_WATER_SOUTH:
-            $x = ($this->info['width'] - $info[0]) / 2;
-            $y = $this->info['height'] - $info[1];
-            break;
+            /* 下居中水印 */
+            case Image::IMAGE_WATER_SOUTH:
+                $x = ($this->info['width'] - $info[0]) / 2;
+                $y = $this->info['height'] - $info[1];
+                break;
 
-        /* 右居中水印 */
-        case Image::IMAGE_WATER_EAST:
-            $x = $this->info['width'] - $info[0];
-            $y = ($this->info['height'] - $info[1]) / 2;
-            break;
+            /* 右居中水印 */
+            case Image::IMAGE_WATER_EAST:
+                $x = $this->info['width'] - $info[0];
+                $y = ($this->info['height'] - $info[1]) / 2;
+                break;
 
-        /* 上居中水印 */
-        case Image::IMAGE_WATER_NORTH:
-            $x = ($this->info['width'] - $info[0]) / 2;
-            $y = 0;
-            break;
+            /* 上居中水印 */
+            case Image::IMAGE_WATER_NORTH:
+                $x = ($this->info['width'] - $info[0]) / 2;
+                $y = 0;
+                break;
 
-        /* 左居中水印 */
-        case Image::IMAGE_WATER_WEST:
-            $x = 0;
-            $y = ($this->info['height'] - $info[1]) / 2;
-            break;
+            /* 左居中水印 */
+            case Image::IMAGE_WATER_WEST:
+                $x = 0;
+                $y = ($this->info['height'] - $info[1]) / 2;
+                break;
 
-        default:
-            /* 自定义水印坐标 */
-            if (is_array($locate)) {
-                list($x, $y) = $locate;
-            } else {
-                throw new Exception('不支持的水印位置类型');
-            }
+            default:
+                /* 自定义水印坐标 */
+                if (is_array($locate)) {
+                    list($x, $y) = $locate;
+                } else {
+                    throw new Exception('不支持的水印位置类型');
+                }
         }
 
         do {
@@ -430,7 +442,8 @@ class Image {
      * @param  integer $offset 文字相对当前位置的偏移量
      * @param  integer $angle  文字倾斜角度
      */
-    public function text($text, $font, $size, $color = '#00000000', $locate = Image::IMAGE_WATER_SOUTHEAST, $offset = 0, $angle = 0) {
+    public function text($text, $font, $size, $color = '#00000000', $locate = Image::IMAGE_WATER_SOUTHEAST, $offset = 0, $angle = 0)
+    {
         //资源检测
         if (empty($this->img)) {
             throw new Exception('没有可以被写入文字的图像资源');
@@ -454,64 +467,64 @@ class Image {
 
         /* 设定文字位置 */
         switch ($locate) {
-        /* 右下角文字 */
-        case Image::IMAGE_WATER_SOUTHEAST:
-            $x += $this->info['width'] - $w;
-            $y += $this->info['height'] - $h;
-            break;
+            /* 右下角文字 */
+            case Image::IMAGE_WATER_SOUTHEAST:
+                $x += $this->info['width'] - $w;
+                $y += $this->info['height'] - $h;
+                break;
 
-        /* 左下角文字 */
-        case Image::IMAGE_WATER_SOUTHWEST:
-            $y += $this->info['height'] - $h;
-            break;
+            /* 左下角文字 */
+            case Image::IMAGE_WATER_SOUTHWEST:
+                $y += $this->info['height'] - $h;
+                break;
 
-        /* 左上角文字 */
-        case Image::IMAGE_WATER_NORTHWEST:
-            // 起始坐标即为左上角坐标，无需调整
-            break;
+            /* 左上角文字 */
+            case Image::IMAGE_WATER_NORTHWEST:
+                // 起始坐标即为左上角坐标，无需调整
+                break;
 
-        /* 右上角文字 */
-        case Image::IMAGE_WATER_NORTHEAST:
-            $x += $this->info['width'] - $w;
-            break;
+            /* 右上角文字 */
+            case Image::IMAGE_WATER_NORTHEAST:
+                $x += $this->info['width'] - $w;
+                break;
 
-        /* 居中文字 */
-        case Image::IMAGE_WATER_CENTER:
-            $x += ($this->info['width'] - $w) / 2;
-            $y += ($this->info['height'] - $h) / 2;
-            break;
+            /* 居中文字 */
+            case Image::IMAGE_WATER_CENTER:
+                $x += ($this->info['width'] - $w) / 2;
+                $y += ($this->info['height'] - $h) / 2;
+                break;
 
-        /* 下居中文字 */
-        case Image::IMAGE_WATER_SOUTH:
-            $x += ($this->info['width'] - $w) / 2;
-            $y += $this->info['height'] - $h;
-            break;
+            /* 下居中文字 */
+            case Image::IMAGE_WATER_SOUTH:
+                $x += ($this->info['width'] - $w) / 2;
+                $y += $this->info['height'] - $h;
+                break;
 
-        /* 右居中文字 */
-        case Image::IMAGE_WATER_EAST:
-            $x += $this->info['width'] - $w;
-            $y += ($this->info['height'] - $h) / 2;
-            break;
+            /* 右居中文字 */
+            case Image::IMAGE_WATER_EAST:
+                $x += $this->info['width'] - $w;
+                $y += ($this->info['height'] - $h) / 2;
+                break;
 
-        /* 上居中文字 */
-        case Image::IMAGE_WATER_NORTH:
-            $x += ($this->info['width'] - $w) / 2;
-            break;
+            /* 上居中文字 */
+            case Image::IMAGE_WATER_NORTH:
+                $x += ($this->info['width'] - $w) / 2;
+                break;
 
-        /* 左居中文字 */
-        case Image::IMAGE_WATER_WEST:
-            $y += ($this->info['height'] - $h) / 2;
-            break;
+            /* 左居中文字 */
+            case Image::IMAGE_WATER_WEST:
+                $y += ($this->info['height'] - $h) / 2;
+                break;
 
-        default:
-            /* 自定义文字坐标 */
-            if (is_array($locate)) {
-                list($posx, $posy) = $locate;
-                $x += $posx;
-                $y += $posy;
-            } else {
-                throw new Exception('不支持的文字位置类型');
-            }
+            default:
+                /* 自定义文字坐标 */
+                if (is_array($locate)) {
+                    list($posx, $posy) = $locate;
+                    $x += $posx;
+                    $y += $posy;
+                } else {
+                    throw new Exception('不支持的文字位置类型');
+                }
         }
 
         /* 设置偏移量 */
@@ -545,7 +558,8 @@ class Image {
      * 切换到GIF的下一帧并保存当前帧
      * @return boolean
      */
-    private function gifNext() {
+    private function gifNext()
+    {
         ob_start();
         ob_implicit_flush(0);
         imagegif($this->img);
@@ -566,7 +580,8 @@ class Image {
     /**
      * 析构方法，用于销毁图像资源
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         empty($this->img) || imagedestroy($this->img);
     }
 
