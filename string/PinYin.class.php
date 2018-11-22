@@ -8,7 +8,8 @@
  *          echo Pingying::getPY('这是一段测试文字， This is a string', 'all'), '<br/>'; //结果为全拼音
  *          echo Pingying::getPY('这是一段测试文字， This is a string', 'one'), '<br/>'; //结果为第一个拼音
  */
-class PinYing {
+class PinYing
+{
     /**
      * 拼音字符转换图
      * @var array
@@ -45,7 +46,8 @@ class PinYing {
      * @param string $sRetFormat 返回格式 [first:每个字的首字母|all:全拼音|one:字符串字母]
      * @return string
      */
-    public static function getPY($chinese, $sRetFormat = 'first') {
+    public static function getPY($chinese, $sRetFormat = 'first')
+    {
         $sGBK = iconv('UTF-8', 'GBK', $chinese);
         $sUTF8 = iconv('GBK', 'UTF-8', $sGBK);
         if ($sUTF8 != $chinese) {
@@ -81,7 +83,8 @@ class PinYing {
      * @param number $iWORD 待处理字符双字节
      * @return string 拼音
      */
-    private static function zh2py($iWORD) {
+    private static function zh2py($iWORD)
+    {
         if ($iWORD > 0 && $iWORD < 160) {
             return chr($iWORD);
         } elseif ($iWORD < -20319 || $iWORD > -10247) {

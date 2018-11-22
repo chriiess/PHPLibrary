@@ -1,12 +1,14 @@
 <?php
-class LCS {
+class LCS
+{
 
-    var $str1;
-    var $str2;
-    var $c = array();
+    public $str1;
+    public $str2;
+    public $c = array();
     /*返回串一和串二的最长公共子序列
      */
-    function getLCS($str1, $str2, $len1 = 0, $len2 = 0) {
+    public function getLCS($str1, $str2, $len1 = 0, $len2 = 0)
+    {
         $this->str1 = $str1;
         $this->str2 = $str2;
         if ($len1 == 0) {
@@ -22,13 +24,15 @@ class LCS {
     }
     /*返回两个串的相似度
      */
-    function getSimilar($str1, $str2) {
+    public function getSimilar($str1, $str2)
+    {
         $len1 = strlen($str1);
         $len2 = strlen($str2);
         $len = strlen($this->getLCS($str1, $str2, $len1, $len2));
         return $len * 2 / ($len1 + $len2);
     }
-    function initC($len1, $len2) {
+    public function initC($len1, $len2)
+    {
         for ($i = 0; $i < $len1; $i++) {
             $this->c[$i][0] = 0;
         }
@@ -49,7 +53,8 @@ class LCS {
             }
         }
     }
-    function printLCS($c, $i, $j) {
+    public function printLCS($c, $i, $j)
+    {
         if ($i == 0 || $j == 0) {
             if ($this->str1[$i] == $this->str2[$j]) {
                 return $this->str2[$j];

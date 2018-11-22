@@ -22,8 +22,8 @@ class FileDownload
 
     /**
      * 下载文件
-     * @param string $filePath              文件路径
-     * @param string $fileName              文件保存名，如果为空，则从路径中获取保存的名字
+     * @param string $filePath文件路径
+     * @param string $fileName文件保存名，如果为空，则从路径中获取保存的名字
      */
     public function downloadFile($filePath, $downLoadName = '')
     {
@@ -48,7 +48,7 @@ class FileDownload
 
     /**
      * 设置文件过滤器，定义禁止下载的文件类型,可以在下载前动态定义
-     * @param string $fileFilter            字符串定义的文件下载类型，用逗号分隔
+     * @param string $fileFilter 字符串定义的文件下载类型，用逗号分隔
      */
     public function setFilter($fileFilter)
     {
@@ -69,7 +69,7 @@ class FileDownload
 
     /**
      * 验证文件有效性及可下载
-     * @param string $filePath      文件路径
+     * @param string $filePath 文件路径
      * @return boolean
      */
     private function fileCheck($filePath)
@@ -193,5 +193,4 @@ class FileDownload
         $this->fileType['aifc'] = "audio/x-aiff";
         $this->fileType['swf'] = "application/x-shockwave-flash";
     }
-
 }

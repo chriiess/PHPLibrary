@@ -21,7 +21,8 @@
  * @return string $new_str 返回截取的字符串
  */
 
-function msubstr($str, $length, $start = 0, $suffix = "") {
+function msubstr($str, $length, $start = 0, $suffix = "")
+{
 
     $new_str = "";
     $str_length = $length + $start;
@@ -45,7 +46,8 @@ function msubstr($str, $length, $start = 0, $suffix = "") {
  * @param    string     $chars   可选的 ，默认为 0123456789
  * @return   string     字符串
  */
-function random($length, $chars = '123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ') {
+function random($length, $chars = '123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJKLMNPQRSTUVWXYZ')
+{
     $hash = '';
     $max = strlen($chars) - 1;
     for ($i = 0; $i < $length; $i++) {
@@ -62,7 +64,8 @@ function random($length, $chars = '123456789abcdefghijklmnpqrstuvwxyzABCDEFGHIJK
  * @param int    $lenth 要截取中文UTF-8字符串的长度
  * @return string
  */
-function utf8Substr($str, $start, $lenth) {
+function utf8Substr($str, $start, $lenth)
+{
     $len = strlen($str);
     $r = array();
     $n = 0;
@@ -106,7 +109,8 @@ function utf8Substr($str, $start, $lenth) {
  * @param string $str 要计算长度的字符串
  * @return int        返回字符串的长度
  */
-function utf8Strlen($str) {
+function utf8Strlen($str)
+{
     if (empty($str)) {
         return 0;
     }
@@ -124,7 +128,8 @@ function utf8Strlen($str) {
  * @param $length
  * @param $dot
  */
-function strCut($string, $length, $dot = '...') {
+function strCut($string, $length, $dot = '...')
+{
     $strlen = strlen($string);
     if ($strlen <= $length) {
         return $string;
@@ -198,10 +203,11 @@ function strCut($string, $length, $dot = '...') {
  * @param $string
  * @return string
  */
-function removeXss($string) {
+function removeXss($string)
+{
     $string = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $string);
-    $parm1 = Array('javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base');
-    $parm2 = Array('onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavailable', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterchange', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange', 'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 'onrowenter', 'onrowexit', 'onrowsdelete', 'onrowsinserted', 'onscroll', 'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 'onsubmit', 'onunload');
+    $parm1 = array('javascript', 'vbscript', 'expression', 'applet', 'meta', 'xml', 'blink', 'link', 'script', 'embed', 'object', 'iframe', 'frame', 'frameset', 'ilayer', 'layer', 'bgsound', 'title', 'base');
+    $parm2 = array('onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavailable', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterchange', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmouseout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange', 'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 'onrowenter', 'onrowexit', 'onrowsdelete', 'onrowsinserted', 'onscroll', 'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 'onsubmit', 'onunload');
     $parm = array_merge($parm1, $parm2);
     for ($i = 0; $i < sizeof($parm); $i++) {
         $pattern = '/';
@@ -223,7 +229,8 @@ function removeXss($string) {
 /**
  * 清除html、css、js格式并去除空格
  */
-function clearHtml($descclear) {
+function clearHtml($descclear)
+{
 
     $descclear = preg_replace("/<[ ]+/si", "<", $descclear); //过滤<__("<"号后面带空格)
     $descclear = preg_replace("/<\!--.*?-->/si", "", $descclear); //过滤html注释
@@ -263,7 +270,8 @@ function clearHtml($descclear) {
 /**
  * 修复html
  */
-function repairHtml($html, $length = null) {
+function repairHtml($html, $length = null)
+{
 
     $result = '';
     $tagStack = array();

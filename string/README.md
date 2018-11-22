@@ -17,4 +17,5 @@
 * Chinese.class.php 	汉字处理类
 * Classfier.class.php  	朴素贝叶斯算法
 * encrypt.class.php 	加密解密算法
+* tranc.class.php 	繁体简体互转类
 
